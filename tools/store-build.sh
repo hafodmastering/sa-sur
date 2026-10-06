@@ -64,22 +64,25 @@ echo "==> SA-Sur $VERSION (build $BUILD_NUMBER), mode: $MODE"
 
 if [ "$MODE" = "store" ]; then
     echo "==> checking certificates and profile"
-    if ! security find-identity -v -p codesigning | grep -qF "$STORE_APP_IDENTITY"; then
+    IDENTITIES_APP="$(security find-identity -v -p codesigning 2>&1 || true)"
+    if [[ "$IDENTITIES_APP" != *"$STORE_APP_IDENTITY"* ]]; then
         echo "FAIL: app identity not in the keychain: $STORE_APP_IDENTITY" >&2
-        echo "Identities available:" >&2
-        security find-identity -v -p codesigning >&2 || true
+        printf '%s\n' "$IDENTITIES_APP" >&2
         exit 2
     fi
+    # Mac installer identities: the portal calls the type "Mac Installer
+    # Distribution" but Apple issues the legacy common name, so try both.
+    IDENTITIES_ALL="$(security find-identity -v 2>&1 || true)"
     PKG_IDENTITY=""
     for candidate in "${STORE_PKG_IDENTITIES[@]}"; do
-        if security find-identity -v | grep -qF "$candidate"; then
+        if [[ "$IDENTITIES_ALL" == *"$candidate"* ]]; then
             PKG_IDENTITY="$candidate"
             break
         fi
     done
     if [ -z "$PKG_IDENTITY" ]; then
         echo "FAIL: installer identity not in the keychain (tried: ${STORE_PKG_IDENTITIES[*]})" >&2
-        security find-identity -v >&2 || true
+        printf '%s\n' "$IDENTITIES_ALL" >&2
         exit 2
     fi
     if [ ! -f "$PROFILE" ]; then
@@ -175,8 +178,12 @@ else
     echo "FAIL: app-sandbox entitlement missing from $APP" >&2
     exit 4
 fi
-codesign -dvvv "$APP" 2>&1 | grep -E "Identifier|Authority|TeamIdentifier|Signature" || true
-if [ "$MODE" = "store" ] && ! codesign -dvvv "$APP" 2>&1 | grep -q "Apple Distribution"; then
+# Capture the signature description once instead of piping it into `grep -q`:
+# grep -q exits at the first match, codesign dies of SIGPIPE and `pipefail`
+# would then report a perfectly good signature as a failure.
+SIGN_INFO="$(codesign -dvvv "$APP" 2>&1 || true)"
+printf '%s\n' "$SIGN_INFO" | grep -E "Identifier|Authority|TeamIdentifier|Signature" || true
+if [ "$MODE" = "store" ] && [[ "$SIGN_INFO" != *"Apple Distribution"* ]]; then
     echo "FAIL: app not signed with an Apple Distribution certificate" >&2
     exit 4
 fi
