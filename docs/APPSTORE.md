@@ -108,35 +108,39 @@ every file before upload** — required by Apple since Feb 2025.
 
 1. **0.96 notarized, for Aditya's review** — done; it is a developer build, not a
    store candidate.
-2. **Decisions** (below): bundle identifier, whether the store release *is* 1.0,
-   who writes the support/privacy pages.
-3. **Sandbox pass + privacy manifest + `store-build.sh`**, then `verify.sh` and
-   the sandboxed smoke test. This is the only engineering, and it can happen
-   before any Apple-side setup.
+2. **Decisions** — done, 6 Oct: joint bundle identifier, channel numbering and
+   listing pages are settled (see below).
+3. **Sandbox pass + privacy manifest + `store-build.sh`** — done on branch
+   `appstore` (smoke-verified); `verify.sh` and the interactive smoke remain.
 4. **Certs, App ID, profile** (Donal, Admin) and the App Store Connect record.
 5. **Upload, then TestFlight** for Aditya and Gethin to install a real store
    build on their own machines before a public submission.
 6. **Submit for review.** Expect metadata questions rather than code problems:
    the app is a self-contained native utility with no third-party SDKs and no
    data collection.
-7. **Release.** Whether that lands as 1.0 or as 1.0.1 depends on decision 2.
+7. **Release.** The store release lands as **1.1** (settled 6 Oct — see
+   Decisions).
 
-## Open questions
+## Decisions (settled 6 Oct)
 
-- **Bundle identifier.** Today it is `com.donal.sasur` for the direct download.
-  Options: keep the same identifier for the store (simplest, one identity to
-  reason about), or register a Sudeep-owned identifier such as
-  `com.sudeepaudio.sasur` for the store build (branding consistency, but the two
-  channels are then formally different apps). Changing it after a public release
-  forks app identity, so this is worth settling before 1.0 either way.
-- **Is the store release the 1.0 moment?** The earlier recommendation was to
-  ship the notarized GitHub 1.0 without waiting for App Review, and let the store
-  follow as its own increment. If the store must *be* 1.0, then review timing
-  gates the release date and the two channels launch together.
-- **Support and privacy URLs.** Needed before submission; best decided by
-  Hafod (Donal) even though the listing sits under the Sudeep team.
-- **Versioning.** The store's version line is independent of the Git tags; the
-  simplest is to keep the same numbers in both channels.
+- **Bundle identifier: `com.hafodsudeep.sasur`** for both channels — a joint
+  Hafod × Sudeep namespace for the collaboration (replaces `com.donal.sasur`;
+  decided while nothing is public, because changing the identifier after the
+  first public release forks app identity). The seller string is unchanged
+  (`Sudeep Audio.com LLP`). Register the explicit App ID under this identifier
+  when the certificates are made.
+- **Numbering: the store debuts at 1.1, not 1.0.** The GitHub 1.0 is the
+  notarized release and ships as soon as both studios sign off; the store build
+  is a different artifact (sandboxed, with the privacy manifest) and lands on
+  its own clock through App Review. The two version lines are independent and
+  need no synchronisation.
+- **Support and privacy pages live in this repository** — `docs/SUPPORT.md` and
+  `docs/PRIVACY.md`, served once the repo is public (GitHub Pages from `main`
+  `/docs`, or the files' own URLs).
+
+With these settled, the sequencing above stands as written: the decisions (2)
+and the engineering (3) are done — next come the certificates, App ID and
+profile (4), then upload and TestFlight (5).
 
 ## Watch-outs
 
