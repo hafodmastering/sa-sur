@@ -25,7 +25,7 @@ guard let bundle = Bundle(path: appPath) else {
 print("bundle: \(appPath)")
 
 let info = bundle.infoDictionary ?? [:]
-check("CFBundleIdentifier", info["CFBundleIdentifier"] as? String == "com.donal.sasur",
+check("CFBundleIdentifier", info["CFBundleIdentifier"] as? String == "com.hafodsudeep.sasur",
       info["CFBundleIdentifier"] as? String ?? "missing")
 check("CFBundleShortVersionString", (info["CFBundleShortVersionString"] as? String)?.isEmpty == false,
       info["CFBundleShortVersionString"] as? String ?? "missing")
