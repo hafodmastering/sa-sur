@@ -52,7 +52,11 @@ elif [ -n "${1:-}" ]; then
 fi
 
 STORE_APP_IDENTITY="${STORE_APP_IDENTITY:-Apple Distribution: Sudeep Audio.com LLP ($TEAM_ID)}"
+# Apple keeps the legacy common name for the Mac installer certificate type
+# ("Mac Installer Distribution" in the portal, "3rd Party Mac Developer
+# Installer" in the issued certificate), so accept either label.
 STORE_PKG_IDENTITY="${STORE_PKG_IDENTITY:-Mac Installer Distribution: Sudeep Audio.com LLP ($TEAM_ID)}"
+STORE_PKG_IDENTITIES=("$STORE_PKG_IDENTITY" "3rd Party Mac Developer Installer: Sudeep Audio.com LLP ($TEAM_ID)")
 PROFILE="${STORE_PROFILE:-$ROOT/build/embedded.provisionprofile}"
 PKG="$BUILD/SA-Sur-$VERSION-store.pkg"
 
@@ -66,8 +70,15 @@ if [ "$MODE" = "store" ]; then
         security find-identity -v -p codesigning >&2 || true
         exit 2
     fi
-    if ! security find-identity -v | grep -qF "$STORE_PKG_IDENTITY"; then
-        echo "FAIL: installer identity not in the keychain: $STORE_PKG_IDENTITY" >&2
+    PKG_IDENTITY=""
+    for candidate in "${STORE_PKG_IDENTITIES[@]}"; do
+        if security find-identity -v | grep -qF "$candidate"; then
+            PKG_IDENTITY="$candidate"
+            break
+        fi
+    done
+    if [ -z "$PKG_IDENTITY" ]; then
+        echo "FAIL: installer identity not in the keychain (tried: ${STORE_PKG_IDENTITIES[*]})" >&2
         security find-identity -v >&2 || true
         exit 2
     fi
@@ -197,9 +208,9 @@ if [ "$MODE" = "store" ]; then
         exit 5
     fi
 
-    echo "==> packaging with $STORE_PKG_IDENTITY"
+    echo "==> packaging with $PKG_IDENTITY"
     rm -f "$PKG"
-    productbuild --sign "$STORE_PKG_IDENTITY" --component "$APP" /Applications "$PKG"
+    productbuild --sign "$PKG_IDENTITY" --component "$APP" /Applications "$PKG"
 
     echo "==> verifying package"
     pkgutil --check-signature "$PKG"
