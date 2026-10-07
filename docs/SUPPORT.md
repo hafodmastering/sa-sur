@@ -4,7 +4,7 @@ SA-Sur — *know your note, know your frequency* — shows the frequency of any 
 
 ## Using it
 
-Everything is in one window: click a note and an octave, adjust the concert-A reference (440 / 432 / 415 / 442) or the number of decimal places if you want to, and press **Play** or the space bar to hear the tone. That is the whole app — there is nothing to configure and nothing to sign up for.
+Everything is in one window: click a note and an octave, adjust the concert-A reference (440 / 432 / 415 / 442) or the number of decimal places if you want to, and press Play or the space bar to hear the tone. That is the whole app - there is nothing to configure and nothing to sign up for.
 
 ## If something is wrong
 
@@ -15,7 +15,7 @@ Everything is in one window: click a note and an octave, adjust the concert-A re
 
 ## What "support" means here
 
-SA-Sur is released as-is. Neither studio offers product support for it, reviews pull requests, or collects feature requests; the app is published free of charge. The README has the full story.
+SA-Sur is released as-is. Neither company offers product support for it, reviews pull requests, or collects feature requests; the app is published free of charge. The README has the full story.
 
 ## Links
 
