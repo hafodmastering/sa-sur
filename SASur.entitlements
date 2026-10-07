@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<!-- App Store validation requires the signature to carry the same
+	     application identifier the provisioning profile authorises
+	     (Transporter error 90886 otherwise). Xcode injects these two from the
+	     build settings; this project signs by hand, so they are explicit here.
+	     store-build.sh checks them against Info.plist before building. -->
+	<key>com.apple.application-identifier</key>
+	<string>E37W7LU474.com.hafodsudeep.sasur</string>
+	<key>com.apple.developer.team-identifier</key>
+	<string>E37W7LU474</string>
+	<key>com.apple.security.app-sandbox</key>
+	<true/>
+</dict>
+</plist>

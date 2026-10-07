@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <!-- Plain net10.0, not -windows: the interface is portable, so it can be built and rendered
+         offscreen on this Mac. The only Windows-specific thing it needs is behind IToneOutput. -->
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RootNamespace>SaSur.Ui</RootNamespace>
+    <AssemblyName>SaSur.Ui</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Avalonia" Version="11.3.7" />
+    <PackageReference Include="Avalonia.Themes.Fluent" Version="11.3.7" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SA-Sur.Core\SaSur.Core.csproj" />
+  </ItemGroup>
+
+  <!-- Bundled artwork and the typeface. AvaloniaAssets picks up avares:// paths. -->
+  <ItemGroup>
+    <AvaloniaResource Include="Assets\**" />
+  </ItemGroup>
+
+</Project>

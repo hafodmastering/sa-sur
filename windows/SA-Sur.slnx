@@ -1,0 +1,29 @@
+<Solution>
+  <Folder Name="/SA-Sur.App.Tests/">
+    <Project Path="SA-Sur.App.Tests/SaSur.App.Tests.csproj" />
+  </Folder>
+  <Folder Name="/SA-Sur.App/">
+    <Project Path="SA-Sur.App/SaSur.App.csproj" />
+  </Folder>
+  <Folder Name="/SA-Sur.Audio.Tests/">
+    <Project Path="SA-Sur.Audio.Tests/SaSur.Audio.Tests.csproj" />
+  </Folder>
+  <Folder Name="/SA-Sur.Audio/">
+    <Project Path="SA-Sur.Audio/SaSur.Audio.csproj" />
+  </Folder>
+  <Folder Name="/SA-Sur.Core.Tests/">
+    <Project Path="SA-Sur.Core.Tests/SaSur.Core.Tests.csproj" />
+  </Folder>
+  <Folder Name="/SA-Sur.Core/">
+    <Project Path="SA-Sur.Core/SaSur.Core.csproj" />
+  </Folder>
+  <Folder Name="/SaSur.Measure/">
+    <Project Path="SaSur.Measure/SaSur.Measure.csproj" />
+  </Folder>
+  <Folder Name="/SA-Sur.Ui.Tests/">
+    <Project Path="SA-Sur.Ui.Tests/SaSur.Ui.Tests.csproj" />
+  </Folder>
+  <Folder Name="/SA-Sur.Ui/">
+    <Project Path="SA-Sur.Ui/SaSur.Ui.csproj" />
+  </Folder>
+</Solution>

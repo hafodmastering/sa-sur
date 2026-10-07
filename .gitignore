@@ -1,0 +1,14 @@
+# Build output: the .app bundle, .icns, the release zips, test logs, rendered snapshots
+build/
+
+# .NET (the Windows port)
+windows/**/bin/
+windows/**/obj/
+
+# macOS
+.DS_Store
+
+# Signing material must never reach the repository
+*.p12
+*.p8
+*.cer
