@@ -113,10 +113,10 @@ echo "==> icon"
 mkdir -p "$BUILD/icon"
 swiftc -O -target "$(uname -m)-apple-macos$MIN_MACOS" -sdk "$SDK" \
     "$ROOT/tools/MakeIcon.swift" -o "$BUILD/icon/MakeIcon"
-swiftc -O -target "$(uname -m)-apple-macos$MIN_MACOS" -sdk "$SDK" \
-    "$ROOT/tools/CleanIcon.swift" -o "$BUILD/icon/CleanIcon"
-"$BUILD/icon/CleanIcon" "$ROOT/logos/SA-Sur app logo.png" "$BUILD/icon/artwork-clean-1.25.png" 1.25
-"$BUILD/icon/MakeIcon" "$BUILD/icon/artwork-clean-1.25.png" "$BUILD/icon/master-1024.png" 1024 grid > /dev/null
+# The artwork arrives finished (see build.sh): MakeIcon takes the silhouette from
+# its alpha channel and fits it to Apple's icon grid. CleanIcon was retired with
+# the previous artwork.
+"$BUILD/icon/MakeIcon" "$ROOT/logos/SA-Sur app logo.png" "$BUILD/icon/master-1024.png" 1024 grid > /dev/null
 ICONSET="$BUILD/AppIcon.iconset"
 mkdir -p "$ICONSET"
 sips -z 16 16     "$BUILD/icon/master-1024.png" --out "$ICONSET/icon_16x16.png"      > /dev/null
