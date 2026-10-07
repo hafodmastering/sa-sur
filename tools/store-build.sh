@@ -91,6 +91,16 @@ if [ "$MODE" = "store" ]; then
         echo "Distribution > Mac App Store Connect) and save it there, or set STORE_PROFILE." >&2
         exit 2
     fi
+    # The signature and the profile must agree on the application identifier
+    # (Transporter error 90886). The entitlements file carries it explicitly
+    # because this project signs by hand; keep it in step with Info.plist.
+    ENT_APP_ID="$(/usr/libexec/PlistBuddy -c "Print :com.apple.application-identifier" "$ENTITLEMENTS" 2>/dev/null || true)"
+    if [ "$ENT_APP_ID" != "$TEAM_ID.$BUNDLE_ID" ]; then
+        echo "FAIL: $ENTITLEMENTS declares application-identifier '$ENT_APP_ID'," >&2
+        echo "      but the bundle is $TEAM_ID.$BUNDLE_ID — App Store validation would reject it." >&2
+        exit 2
+    fi
+    echo "    application-identifier $ENT_APP_ID (entitlements, profile and bundle agree)"
 fi
 
 rm -rf "$BUILD"
@@ -162,21 +172,43 @@ if [ "$MODE" = "store" ]; then
 fi
 
 echo "==> signing ($MODE)"
+SIGN_ENTITLEMENTS="$BUILD/SA-Sur-$MODE.entitlements"
+cp "$ENTITLEMENTS" "$SIGN_ENTITLEMENTS"
+if [ "$MODE" = "smoke" ]; then
+    # com.apple.application-identifier and the team identifier are restricted
+    # entitlements: they are only valid with a provisioning profile, so an
+    # ad-hoc smoke build must not carry them or it will not launch.
+    /usr/libexec/PlistBuddy -c "Delete :com.apple.application-identifier" "$SIGN_ENTITLEMENTS" 2>/dev/null || true
+    /usr/libexec/PlistBuddy -c "Delete :com.apple.developer.team-identifier" "$SIGN_ENTITLEMENTS" 2>/dev/null || true
+fi
 if [ "$MODE" = "store" ]; then
     codesign --force --options runtime --timestamp \
-        --entitlements "$ENTITLEMENTS" --sign "$STORE_APP_IDENTITY" "$APP"
+        --entitlements "$SIGN_ENTITLEMENTS" --sign "$STORE_APP_IDENTITY" "$APP"
 else
     codesign --force --options runtime --timestamp=none \
-        --entitlements "$ENTITLEMENTS" --sign - "$APP"
+        --entitlements "$SIGN_ENTITLEMENTS" --sign - "$APP"
 fi
 codesign --verify --strict --verbose=2 "$APP" 2>&1 | tail -3
 
 echo "==> checking entitlements"
-if codesign -d --entitlements :- "$APP" 2>/dev/null | grep -q "com.apple.security.app-sandbox"; then
-    echo "  OK  app-sandbox entitlement present"
-else
+APP_ENTITLEMENTS="$(codesign -d --entitlements :- "$APP" 2>/dev/null || true)"
+if [[ "$APP_ENTITLEMENTS" != *"com.apple.security.app-sandbox"* ]]; then
     echo "FAIL: app-sandbox entitlement missing from $APP" >&2
     exit 4
+fi
+echo "  OK  app-sandbox entitlement present"
+if [ "$MODE" = "store" ]; then
+    # App Store validation (Transporter error 90886) wants the application
+    # identifier in the *signature*, not just in the embedded profile. Check the
+    # signed result, not the input, so a signing change cannot slip past.
+    if [[ "$APP_ENTITLEMENTS" == *"$TEAM_ID.$BUNDLE_ID"* ]]; then
+        echo "  OK  application-identifier $TEAM_ID.$BUNDLE_ID is in the signature"
+    else
+        echo "FAIL: the signature carries no application-identifier for $TEAM_ID.$BUNDLE_ID." >&2
+        echo "      App Store Connect rejects this build (Transporter error 90886)." >&2
+        printf '%s\n' "$APP_ENTITLEMENTS" >&2
+        exit 4
+    fi
 fi
 # Capture the signature description once instead of piping it into `grep -q`:
 # grep -q exits at the first match, codesign dies of SIGPIPE and `pipefail`
