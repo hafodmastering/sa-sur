@@ -77,14 +77,24 @@ licence — see `NOTICE` and the Licence section of the README.
 
 ## The icon
 
-`tools/MakeIcon.swift` composes the 1024 px master icon from the SA-Sur artwork.
-It removes the artwork's pure-black backdrop by measuring its ink silhouette row
-by row — the artwork's corners are a squircle, so its own edge is followed rather
-than imposing a geometric rounded-rect mask, which would leave black wedges at
-the corners — then fits the silhouette to Apple's macOS icon grid: an 824 px body
-centred in the 1024 px canvas. `build.sh` downsamples that master into the
-`.icns`. The same tool also produces the 176 px in-window mark, so the mark and
-the icon can never drift apart.
+`tools/MakeIcon.swift` composes the 1024 px master icon from the artwork in
+`logos/SA-Sur app logo.png`. The artwork is Aditya's redraw (6 Oct 2026): a flat
+black squircle tile carrying the white Latin **sā** and the gold Devanagari
+**स**, supplied with the tile's exterior flat (black on black), so the tile
+outline was restored from the silhouette of his red-tile export and scaled onto
+this canvas before the file was committed.
+
+The tool takes the silhouette from the artwork's **alpha channel** where the
+artwork has one — a black tile on transparency has no brightness difference to
+measure — and falls back to the original brightness test (ink = anything
+brighter than a pure-black backdrop) for opaque artwork. It then fits the
+silhouette to Apple's macOS icon grid: an 824 px body centred in the 1024 px
+canvas, its own edge followed row by row rather than a geometric rounded-rect
+mask imposed on it. `build.sh` downsamples that master into the `.icns`.
+
+`tools/CleanIcon.swift` (the diffusion cleanup that removed the ring, waveform
+bars and credit line from the previous artwork) was retired with that artwork:
+the redraw arrives finished, so the build feeds MakeIcon directly.
 
 ## Verification approach
 

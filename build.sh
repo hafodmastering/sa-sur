@@ -11,7 +11,7 @@ ROOT="$(cd "$(dirname "$0")" && pwd)"
 SDK="$(xcrun --show-sdk-path)"
 BUILD="$ROOT/build"
 APP="$BUILD/SA-Sur.app"
-VERSION="0.97"
+VERSION="1.0"
 MIN_MACOS="13.0"
 ARCHS="arm64 x86_64"
 SOURCES=("$ROOT/src/NoteMath.swift" "$ROOT/src/SineOscillator.swift" "$ROOT/src/ToneGenerator.swift" "$ROOT/src/Views.swift" "$ROOT/src/App.swift")
@@ -36,14 +36,14 @@ echo "==> icon"
 mkdir -p "$BUILD/icon"
 swiftc -O -target "$(uname -m)-apple-macos$MIN_MACOS" -sdk "$SDK" \
     "$ROOT/tools/MakeIcon.swift" -o "$BUILD/icon/MakeIcon"
-# The supplied artwork still carries the waveform bars, the gold ring and the
-# credit line; CleanIcon measures and removes them and scales the mark up, then
-# MakeIcon fits the result to Apple's icon grid. Both steps re-read their own
-# output, so a bad icon fails the build rather than shipping.
-swiftc -O -target "$(uname -m)-apple-macos$MIN_MACOS" -sdk "$SDK" \
-    "$ROOT/tools/CleanIcon.swift" -o "$BUILD/icon/CleanIcon"
-"$BUILD/icon/CleanIcon" "$ROOT/logos/SA-Sur app logo.png" "$BUILD/icon/artwork-clean-1.25.png" 1.25
-"$BUILD/icon/MakeIcon" "$BUILD/icon/artwork-clean-1.25.png" "$BUILD/icon/master-1024.png" 1024 grid > /dev/null
+# The artwork arrives finished — a flat black tile with the sā and the gold स,
+# flat exterior — so nothing is cleaned first (CleanIcon retired with the
+# previous artwork, which carried a ring, waveform bars and a credit line).
+# MakeIcon takes the silhouette from the artwork's alpha channel, since a black
+# tile on transparency has no brightness difference to measure, and fits it to
+# Apple's icon grid. It re-reads its own output, so a bad icon fails the build
+# rather than shipping.
+"$BUILD/icon/MakeIcon" "$ROOT/logos/SA-Sur app logo.png" "$BUILD/icon/master-1024.png" 1024 grid > /dev/null
 ICONSET="$BUILD/AppIcon.iconset"
 rm -rf "$ICONSET"
 mkdir -p "$ICONSET"

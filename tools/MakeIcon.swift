@@ -59,12 +59,27 @@ guard let readContext = CGContext(
 readContext.draw(artwork, in: CGRect(x: 0, y: 0, width: width, height: height))
 
 // --- silhouette: per-row ink extents --------------------------------------
-// "Ink" is anything brighter than the backdrop, which measures 0-1 on a 0-255
-// scale; 20 leaves headroom for compression noise while every pixel of the
-// artwork itself (its darkest edge areas included) is comfortably above it.
+// Two sources of truth, chosen once from the artwork itself:
+//   alpha    - artwork with a real alpha channel is masked by alpha. Needed for
+//              a black tile on transparency, where there is no brightness
+//              difference between the tile and the void to measure.
+//   brightness - the original case: opaque artwork on a pure-black backdrop,
+//              where "ink" is anything brighter than the backdrop (0-1 on a
+//              0-255 scale; 20 leaves headroom for compression noise while
+//              every pixel of the artwork itself is comfortably above it).
 let inkThreshold = 20
+var transparentSamples = 0
+for index in stride(from: 3, to: pixels.count, by: 4) where pixels[index] < 8 {
+    transparentSamples += 1
+}
+let useAlpha = transparentSamples > (width * height) / 100
+print(useAlpha
+      ? "MakeIcon: silhouette from the artwork's alpha channel (\(transparentSamples) transparent samples)"
+      : "MakeIcon: silhouette from brightness (artwork is opaque)")
+
 func isInk(_ x: Int, _ y: Int) -> Bool {
     let index = (y * width + x) * 4
+    guard !useAlpha else { return pixels[index + 3] > 8 }
     return max(pixels[index], max(pixels[index + 1], pixels[index + 2])) > UInt8(inkThreshold)
 }
 
@@ -105,7 +120,9 @@ for y in 0..<height {
         masked[index] = pixels[index]
         masked[index + 1] = pixels[index + 1]
         masked[index + 2] = pixels[index + 2]
-        masked[index + 3] = 255
+        // Alpha artwork keeps its own coverage, so the tile edge stays
+        // antialiased instead of being forced to a hard edge.
+        masked[index + 3] = useAlpha ? pixels[index + 3] : 255
     }
 }
 guard let provider = CGDataProvider(data: Data(masked) as CFData),
