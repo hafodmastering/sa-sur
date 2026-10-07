@@ -1,0 +1,305 @@
+<!-- SPDX-License-Identifier: Apache-2.0 -->
+<!-- Copyright 2026 Hafod Mastering Ltd and Sudeep Audio -->
+
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:controls="using:SaSur.Ui"
+             x:Class="SaSur.Ui.SaSurView"
+             x:Name="Root"
+             FontFamily="avares://SaSur.Ui/Assets/Fonts#Nunito">
+
+  <UserControl.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.ThemeDictionaries>
+        <ResourceDictionary x:Key="Default">
+          <SolidColorBrush x:Key="PadFill" Color="#FFEEEEEE" />
+          <SolidColorBrush x:Key="PadHover" Color="#FFD6D6D6" />
+          <SolidColorBrush x:Key="PadPress" Color="#FFC8C8C8" />
+          <SolidColorBrush x:Key="PrimaryText" Color="#FF272727" />
+          <SolidColorBrush x:Key="SecondaryText" Color="#FF8E8E93" />
+          <SolidColorBrush x:Key="Divider" Color="#FFE6E6E6" />
+          <SolidColorBrush x:Key="SegmentSeparator" Color="#FFD4D4D4" />
+          <SolidColorBrush x:Key="ControlFill" Color="#FFEBEBEB" />
+          <SolidColorBrush x:Key="ControlFillHover" Color="#FFE1E1E1" />
+          <SolidColorBrush x:Key="ControlFillPress" Color="#FFD6D6D6" />
+          <SolidColorBrush x:Key="StepSeparator" Color="#FFDCDCDC" />
+          <SolidColorBrush x:Key="SliderFilled" Color="#FFC5C5C5" />
+          <SolidColorBrush x:Key="SliderRest" Color="#FFE6E6E6" />
+          <SolidColorBrush x:Key="KnobFill" Color="#FFFFFFFF" />
+          <SolidColorBrush x:Key="KnobStroke" Color="#FFD9D9D9" />
+        </ResourceDictionary>
+        <ResourceDictionary x:Key="Light">
+          <SolidColorBrush x:Key="PadFill" Color="#FFEEEEEE" />
+          <SolidColorBrush x:Key="PadHover" Color="#FFD6D6D6" />
+          <SolidColorBrush x:Key="PadPress" Color="#FFC8C8C8" />
+          <SolidColorBrush x:Key="PrimaryText" Color="#FF272727" />
+          <SolidColorBrush x:Key="SecondaryText" Color="#FF8E8E93" />
+          <SolidColorBrush x:Key="Divider" Color="#FFE6E6E6" />
+          <SolidColorBrush x:Key="SegmentSeparator" Color="#FFD4D4D4" />
+          <SolidColorBrush x:Key="ControlFill" Color="#FFEBEBEB" />
+          <SolidColorBrush x:Key="ControlFillHover" Color="#FFE1E1E1" />
+          <SolidColorBrush x:Key="ControlFillPress" Color="#FFD6D6D6" />
+          <SolidColorBrush x:Key="StepSeparator" Color="#FFDCDCDC" />
+          <SolidColorBrush x:Key="SliderFilled" Color="#FFC5C5C5" />
+          <SolidColorBrush x:Key="SliderRest" Color="#FFE6E6E6" />
+          <SolidColorBrush x:Key="KnobFill" Color="#FFFFFFFF" />
+          <SolidColorBrush x:Key="KnobStroke" Color="#FFD9D9D9" />
+        </ResourceDictionary>
+        <ResourceDictionary x:Key="Dark">
+          <SolidColorBrush x:Key="PadFill" Color="#FF2D2D2D" />
+          <SolidColorBrush x:Key="PadHover" Color="#FF3D3D3D" />
+          <SolidColorBrush x:Key="PadPress" Color="#FF4A4A4A" />
+          <SolidColorBrush x:Key="PrimaryText" Color="#FFDDDDDD" />
+          <SolidColorBrush x:Key="SecondaryText" Color="#FF98989D" />
+          <SolidColorBrush x:Key="Divider" Color="#FF343434" />
+          <SolidColorBrush x:Key="SegmentSeparator" Color="#FF444444" />
+          <SolidColorBrush x:Key="ControlFill" Color="#FF303030" />
+          <SolidColorBrush x:Key="ControlFillHover" Color="#FF3A3A3A" />
+          <SolidColorBrush x:Key="ControlFillPress" Color="#FF454545" />
+          <SolidColorBrush x:Key="StepSeparator" Color="#FF434343" />
+          <SolidColorBrush x:Key="SliderFilled" Color="#FF515151" />
+          <SolidColorBrush x:Key="SliderRest" Color="#FF343434" />
+          <SolidColorBrush x:Key="KnobFill" Color="#FFFFFFFF" />
+          <SolidColorBrush x:Key="KnobStroke" Color="#FF4A4A4A" />
+        </ResourceDictionary>
+      </ResourceDictionary.ThemeDictionaries>
+    </ResourceDictionary>
+  </UserControl.Resources>
+
+  <UserControl.Styles>
+
+    <Style Selector="Button.pad">
+      <Setter Property="Width" Value="52" />
+      <Setter Property="Height" Value="30" />
+      <Setter Property="Padding" Value="0" />
+      <Setter Property="CornerRadius" Value="7" />
+      <Setter Property="BorderThickness" Value="0" />
+      <Setter Property="FontSize" Value="13" />
+      <Setter Property="FontWeight" Value="Medium" />
+      <Setter Property="HorizontalContentAlignment" Value="Center" />
+      <Setter Property="VerticalContentAlignment" Value="Center" />
+      <Setter Property="Background" Value="{DynamicResource PadFill}" />
+      <Setter Property="Foreground" Value="{DynamicResource PrimaryText}" />
+      <Setter Property="Cursor" Value="Hand" />
+    </Style>
+    <Style Selector="Button.pad /template/ ContentPresenter">
+      <Setter Property="CornerRadius" Value="7" />
+    </Style>
+    <Style Selector="Button.pad:pointerover /template/ ContentPresenter">
+      <Setter Property="Background" Value="{DynamicResource PadHover}" />
+    </Style>
+    <Style Selector="Button.pad:pressed /template/ ContentPresenter">
+      <Setter Property="Background" Value="{DynamicResource PadPress}" />
+    </Style>
+
+    <Style Selector="Button.pad.active /template/ ContentPresenter">
+      <Setter Property="Background" Value="{DynamicResource AccentBrush}" />
+    </Style>
+    <Style Selector="Button.pad.active">
+      <Setter Property="Foreground" Value="White" />
+      <Setter Property="FontWeight" Value="Bold" />
+    </Style>
+
+    <Style Selector="Button.bare">
+      <Setter Property="Background" Value="Transparent" />
+      <Setter Property="BorderThickness" Value="0" />
+      <Setter Property="Padding" Value="0" />
+      <Setter Property="CornerRadius" Value="3" />
+      <Setter Property="Cursor" Value="Hand" />
+    </Style>
+    <Style Selector="Button.bare:pointerover /template/ ContentPresenter">
+      <Setter Property="Background" Value="{DynamicResource PadHover}" />
+    </Style>
+    <Style Selector="Button.bare /template/ ContentPresenter">
+      <Setter Property="Background" Value="Transparent" />
+    </Style>
+
+    <Style Selector="Button.segment">
+      <Setter Property="Width" Value="46" />
+      <Setter Property="Height" Value="24" />
+      <Setter Property="Padding" Value="0" />
+      <Setter Property="CornerRadius" Value="0" />
+      <Setter Property="BorderThickness" Value="0" />
+      <Setter Property="FontSize" Value="11" />
+      <Setter Property="HorizontalContentAlignment" Value="Center" />
+      <Setter Property="VerticalContentAlignment" Value="Center" />
+      <Setter Property="Background" Value="{DynamicResource ControlFill}" />
+      <Setter Property="Foreground" Value="{DynamicResource PrimaryText}" />
+      <Setter Property="Cursor" Value="Hand" />
+    </Style>
+
+    <Style Selector="Button.segment.sep">
+      <Setter Property="BorderThickness" Value="1,0,0,0" />
+      <Setter Property="BorderBrush" Value="{DynamicResource SegmentSeparator}" />
+    </Style>
+    <Style Selector="Button.segment:pointerover /template/ ContentPresenter">
+      <Setter Property="Background" Value="{DynamicResource PadHover}" />
+    </Style>
+    <Style Selector="Button.segment.active /template/ ContentPresenter">
+      <Setter Property="Background" Value="{DynamicResource AccentBrush}" />
+    </Style>
+    <Style Selector="Button.segment.active">
+      <Setter Property="Foreground" Value="White" />
+    </Style>
+    <Style Selector="Button.segment.first /template/ ContentPresenter">
+      <Setter Property="CornerRadius" Value="4,0,0,4" />
+    </Style>
+    <Style Selector="Button.segment.last /template/ ContentPresenter">
+      <Setter Property="CornerRadius" Value="0,4,4,0" />
+    </Style>
+
+    <Style Selector="Button.push">
+      <Setter Property="Padding" Value="0" />
+      <Setter Property="BorderThickness" Value="0" />
+      <Setter Property="CornerRadius" Value="6" />
+      <Setter Property="FontSize" Value="13" />
+      <Setter Property="Foreground" Value="{DynamicResource PrimaryText}" />
+      <Setter Property="HorizontalContentAlignment" Value="Center" />
+      <Setter Property="VerticalContentAlignment" Value="Center" />
+      <Setter Property="Cursor" Value="Hand" />
+    </Style>
+    <Style Selector="Button.push /template/ ContentPresenter">
+      <Setter Property="Background" Value="{DynamicResource ControlFill}" />
+      <Setter Property="CornerRadius" Value="6" />
+    </Style>
+    <Style Selector="Button.push:pointerover /template/ ContentPresenter">
+      <Setter Property="Background" Value="{DynamicResource ControlFillHover}" />
+    </Style>
+    <Style Selector="Button.push:pressed /template/ ContentPresenter">
+      <Setter Property="Background" Value="{DynamicResource ControlFillPress}" />
+    </Style>
+
+    <Style Selector="Border.stepper">
+      <Setter Property="Background" Value="{DynamicResource ControlFill}" />
+    </Style>
+    <Style Selector="Border.stepSeparator">
+      <Setter Property="Background" Value="{DynamicResource StepSeparator}" />
+    </Style>
+    <Style Selector="Button.step">
+      <Setter Property="Background" Value="Transparent" />
+      <Setter Property="BorderThickness" Value="0" />
+      <Setter Property="Padding" Value="0" />
+      <Setter Property="CornerRadius" Value="0" />
+      <Setter Property="HorizontalContentAlignment" Value="Center" />
+      <Setter Property="VerticalContentAlignment" Value="Center" />
+      <Setter Property="Cursor" Value="Hand" />
+    </Style>
+    <Style Selector="Button.step /template/ ContentPresenter">
+      <Setter Property="Background" Value="Transparent" />
+    </Style>
+    <Style Selector="Button.step:pointerover /template/ ContentPresenter">
+      <Setter Property="Background" Value="{DynamicResource ControlFillPress}" />
+    </Style>
+    <Style Selector="Path.chevron">
+      <Setter Property="Stroke" Value="{DynamicResource PrimaryText}" />
+      <Setter Property="StrokeThickness" Value="1.5" />
+      <Setter Property="StrokeJoin" Value="Round" />
+      <Setter Property="StrokeLineCap" Value="Round" />
+    </Style>
+
+    <Style Selector="TextBlock.label">
+      <Setter Property="FontSize" Value="11" />
+      <Setter Property="FontWeight" Value="Medium" />
+      <Setter Property="Foreground" Value="{DynamicResource SecondaryText}" />
+      <Setter Property="VerticalAlignment" Value="Center" />
+    </Style>
+
+    <Style Selector="TextBlock.readout">
+      <Setter Property="FontSize" Value="46" />
+      <Setter Property="FontWeight" Value="SemiBold" />
+      <Setter Property="LineHeight" Value="54" />
+      <Setter Property="Foreground" Value="{DynamicResource PrimaryText}" />
+      <Setter Property="FontFeatures" Value="tnum" />
+    </Style>
+
+    <Style Selector="TextBlock.unit">
+      <Setter Property="FontSize" Value="20" />
+      <Setter Property="FontWeight" Value="Medium" />
+      <Setter Property="Foreground" Value="{DynamicResource SecondaryText}" />
+    </Style>
+
+    <Style Selector="TextBlock.problem">
+      <Setter Property="FontSize" Value="12" />
+      <Setter Property="FontWeight" Value="Medium" />
+      <Setter Property="Foreground" Value="#FFDD3938" />
+      <Setter Property="VerticalAlignment" Value="Bottom" />
+      <Setter Property="Margin" Value="14,0,0,12" />
+    </Style>
+
+    <Style Selector="Path.icon">
+      <Setter Property="Stretch" Value="Uniform" />
+      <Setter Property="Stroke" Value="{DynamicResource SecondaryText}" />
+      <Setter Property="StrokeThickness" Value="1.5" />
+      <Setter Property="StrokeJoin" Value="Round" />
+    </Style>
+    <Style Selector="Path.icon.copied">
+      <Setter Property="Stroke" Value="#2EA043" />
+      <Setter Property="StrokeThickness" Value="2" />
+    </Style>
+
+  </UserControl.Styles>
+
+  <StackPanel x:Name="RootPanel" Margin="20,16,20,16" Spacing="16">
+
+    <StackPanel x:Name="NoteRow" Orientation="Horizontal" Spacing="6" />
+
+    <Grid>
+      <StackPanel Spacing="16">
+        <StackPanel x:Name="OctaveRow" Orientation="Horizontal" Spacing="6" />
+        <StackPanel x:Name="ReadoutRow" Orientation="Horizontal" Spacing="8" />
+      </StackPanel>
+
+      <StackPanel x:Name="BrandRow"
+                  Orientation="Horizontal"
+                  Spacing="4"
+                  HorizontalAlignment="Right"
+                  VerticalAlignment="Bottom" />
+    </Grid>
+
+    <Border Height="1"
+            Background="{DynamicResource Divider}" />
+
+    <Grid ColumnDefinitions="Auto,Auto,*,Auto,Auto,Auto,Auto" VerticalAlignment="Center">
+
+      <Button x:Name="TransportButton" Grid.Column="0" Classes="push"
+              Width="82" Height="24" VerticalAlignment="Center">
+        <StackPanel Orientation="Horizontal" Spacing="5">
+          <Path x:Name="TransportIcon"
+                Width="9" Height="11"
+                Stretch="Uniform"
+                VerticalAlignment="Center"
+                Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" />
+          <TextBlock x:Name="TransportLabel" FontSize="13" VerticalAlignment="Center" />
+        </StackPanel>
+      </Button>
+
+      <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="6" Margin="12,0,0,0"
+                  VerticalAlignment="Center">
+        <Path Width="13" Height="13" Stretch="Uniform" VerticalAlignment="Center"
+              Fill="{DynamicResource SecondaryText}"
+              Data="M0,4.5 L2.5,4.5 L6,1 L6,12 L2.5,8.5 L0,8.5 Z M8,4 A3.2,3.2 0 0 1 8,9 M10.2,1.8 A6.4,6.4 0 0 1 10.2,11.2" />
+        <controls:VolumeSlider x:Name="VolumeSlider"
+                               Width="96" Height="26"
+                               VerticalAlignment="Center"
+                               TrackFill="{DynamicResource SliderRest}"
+                               TrackValueFill="{DynamicResource SliderFilled}"
+                               KnobFill="{DynamicResource KnobFill}"
+                               KnobStroke="{DynamicResource KnobStroke}"
+                               FocusRing="{DynamicResource AccentBrush}" />
+      </StackPanel>
+
+      <TextBlock Grid.Column="3" Classes="label" Text="Concert A" Margin="0,0,10,0"
+                 VerticalAlignment="Center" />
+
+      <StackPanel x:Name="ConcertRow" Grid.Column="4" Orientation="Horizontal"
+                  VerticalAlignment="Center" />
+
+      <StackPanel x:Name="DecimalsRow" Grid.Column="5" Orientation="Horizontal"
+                  Margin="14,0,0,0" VerticalAlignment="Center" />
+
+      <Button x:Name="AppearanceButton" Grid.Column="6" Classes="bare"
+              Width="24" Height="24" Margin="10,0,0,0" VerticalAlignment="Center" />
+    </Grid>
+
+  </StackPanel>
+</UserControl>

@@ -1,0 +1,38 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <RootNamespace>SaSur.App</RootNamespace>
+    <!-- The shipped file is SA-Sur.exe, not SaSur.App.exe. -->
+    <AssemblyName>SA-Sur</AssemblyName>
+
+    <Version>1.0</Version>
+    <AssemblyTitle>SA-Sur : Note to Frequency</AssemblyTitle>
+    <Product>SA-Sur</Product>
+    <Company>Hafod Mastering Ltd and Sudeep Audio</Company>
+    <Copyright>Copyright 2026 Hafod Mastering Ltd and Sudeep Audio</Copyright>
+    <NeutralLanguage>en</NeutralLanguage>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Avalonia" Version="11.3.7" />
+    <PackageReference Include="Avalonia.Desktop" Version="11.3.7" />
+    <PackageReference Include="Avalonia.Themes.Fluent" Version="11.3.7" />
+
+    <!-- Pinned forward of the 0.21.2 that Avalonia.Desktop resolves transitively: CVE-2026-39959,
+         fixed in 0.21.3. The vulnerable code is the Linux D-Bus transport and is unreachable in a
+         Windows build, but shipping a package with an open high-severity advisory in a signed
+         installer is not a defensible position. Same minor line, so nothing else moves. -->
+    <PackageReference Include="Tmds.DBus.Protocol" Version="0.21.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SA-Sur.Ui\SaSur.Ui.csproj" />
+    <ProjectReference Include="..\SA-Sur.Audio\SaSur.Audio.csproj" />
+  </ItemGroup>
+
+</Project>

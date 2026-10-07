@@ -1,0 +1,87 @@
+# Builds, tests and packages the Windows build.
+#
+# It is the honest way to check the app on a machine that is not the author's, and it is a hard
+# prerequisite for the code signing route, because SignPath Foundation only signs artifacts that
+# are automated builds of the public source. The macOS build keeps its own release process; this
+# workflow only touches windows/.
+name: Windows
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "windows/**"
+      - ".github/workflows/windows.yml"
+  pull_request:
+    paths:
+      - "windows/**"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: windows-latest
+    defaults:
+      run:
+        working-directory: windows
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: "10.0.x"
+
+      - name: Toolchain actually in use
+        run: dotnet --info
+
+      - name: Build
+        run: dotnet build SA-Sur.slnx -c Release
+
+      # The device tests are endpoint-gated, so they stand down on a runner with no sound hardware
+      # rather than failing for an environmental reason. The maths, the DSP, the audio path, the
+      # layout geometry and the app host are all covered without one.
+      - name: Test
+        run: dotnet test SA-Sur.slnx -c Release --no-build
+
+      - name: Publish the single-file executable
+        run: >
+          dotnet publish SA-Sur.App/SaSur.App.csproj
+          -c Release -r win-x64 --self-contained true
+          -p:PublishSingleFile=true
+          -p:IncludeNativeLibrariesForSelfExtract=true
+          -o build/win-x64
+
+      - name: Report the artifact and its digest
+        shell: pwsh
+        run: |
+          $exe = Get-Item build/win-x64/SA-Sur.exe
+          "artifact : $($exe.FullName)"
+          "size     : {0:N0} bytes" -f $exe.Length
+          "sha256   : $((Get-FileHash $exe -Algorithm SHA256).Hash.ToLower())"
+          "version  : $($exe.VersionInfo.ProductVersion)"
+
+      # Signing happens here once SignPath Foundation has approved the project. Their requirements:
+      # a manual approval per release, and metadata restrictions enforced on every signed binary
+      # (product name = project name, one product version per build) — which the .csproj already
+      # sets. See docs/CODE-SIGNING.md for the state of that.
+      #
+      # - name: Sign
+      #   uses: signpath/github-action-submit-signing-request@v1
+      #   with:
+      #     api-token: ${{ secrets.SIGNPATH_API_TOKEN }}
+      #     organization-id: ${{ vars.SIGNPATH_ORGANIZATION_ID }}
+      #     project-slug: sa-sur
+      #     signing-policy-slug: release-signing
+      #     artifact-configuration-slug: exe
+      #     github-artifact-id: ${{ steps.upload.outputs.artifact-id }}
+      #     wait-for-completion: true
+
+      - uses: actions/upload-artifact@v7
+        id: upload
+        with:
+          name: SA-Sur-win-x64
+          path: windows/build/win-x64/SA-Sur.exe
+          if-no-files-found: error

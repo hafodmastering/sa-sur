@@ -1,0 +1,16 @@
+SA-Sur
+
+Note to Frequency.
+
+The initial source, the application design and the audio path were written by
+Hafod Mastering Ltd. The app artwork is by Sudeep Audio. The macOS distribution
+is signed and notarized under the Sudeep Audio Apple Developer team. The app is
+released co-branded, with the Sudeep Audio mark and the Hafod Mastering mark
+displayed in the interface.
+
+Bundled
+
+The Windows build embeds the Nunito typeface (© The Nunito Project Authors,
+SIL Open Font License 1.1; the licence ships in
+windows/SA-Sur.Ui/Assets/Fonts/OFL.txt) and is built on Avalonia UI and NAudio,
+both MIT-licensed.

@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <AssemblyName>SaSur.Measure</AssemblyName>
+    <RootNamespace>SaSur.Measure</RootNamespace>
+    <IsPackable>false</IsPackable>
+    <InvariantGlobalization>true</InvariantGlobalization>
+  </PropertyGroup>
+
+  <!-- A developer instrument, not the app. It is never part of a release, and it is published
+       self-contained so it can run on a machine with no SDK installed — which is the whole point
+       of it: the machine with a sound card is somebody else's. -->
+  <ItemGroup>
+    <ProjectReference Include="..\SA-Sur.Audio\SaSur.Audio.csproj" />
+    <ProjectReference Include="..\SA-Sur.Core\SaSur.Core.csproj" />
+  </ItemGroup>
+
+</Project>
