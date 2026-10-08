@@ -20,6 +20,8 @@ The Windows build is **not signed yet**, so SmartScreen shows *"Windows protecte
 
 The feature set matches the macOS app, and audio goes to the default Windows output device.
 
+**Mac App Store.** SA-Sur is submitted there as **1.1** — a separate, sandboxed artifact on App Review's own clock. See [docs/APPSTORE.md](docs/APPSTORE.md).
+
 ## Use
 
 | Do this | What happens |
