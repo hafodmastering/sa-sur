@@ -89,10 +89,10 @@ Fork it, change it, name it, put your own marks on it.
 ## The collaboration
 
 **Hafod Mastering** is a professional mastering studio in Wales. 
-**Sudeep Audio** supplies pro audio hardware and software to studios and musicians in India. 
+**Sudeep Audio** is a pro audio hardware and software supplier in India. 
 
 SA-Sur is the first app in a series we are releasing together, all free of charge. 
 Hafod Mastering built the app; Sudeep Audio contributed the name and the logo, and signs and notarizes the macOS build under its Apple Developer team.  
-The name is *SA* for Sudeep Audio, *sur* for note. 
+*SA* is the first note of the Indian scale, and also the acronym for Sudeep Audio. *sur* is note, or pitch. 
 
 It grew out of Donal Whelan and Gethin John's PALM Expo presentation in Mumbai on using AI in the studio, and Aditya Mehta's response to it - why not release these tools? So here we are.
