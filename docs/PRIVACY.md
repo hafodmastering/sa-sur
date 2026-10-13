@@ -1,4 +1,4 @@
-# Privacy policy — SA-Sur
+# Privacy policy - SA-Sur
 
 SA-Sur is a Mac app released by **Hafod Mastering Ltd** and **Sudeep Audio.com LLP** together. This page describes what the app does with your data.
 
@@ -16,7 +16,7 @@ One setting, on your Mac only: your appearance preference (System, Light or Dark
 
 ## The links in the window
 
-The window shows the two studios' marks. Clicking one asks your web browser to open that studio's website. That is an ordinary visit to that website, under that website's own privacy terms — the app itself sends nothing.
+The window shows the two studios' marks. Clicking one asks your web browser to open that studio's website. That is an ordinary visit to that website, under that website's own privacy terms - the app itself sends nothing.
 
 ## Changes
 

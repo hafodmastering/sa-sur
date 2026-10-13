@@ -36,8 +36,8 @@ echo "==> icon"
 mkdir -p "$BUILD/icon"
 swiftc -O -target "$(uname -m)-apple-macos$MIN_MACOS" -sdk "$SDK" \
     "$ROOT/tools/MakeIcon.swift" -o "$BUILD/icon/MakeIcon"
-# The artwork arrives finished — a flat black tile with the sā and the gold स,
-# flat exterior — so nothing is cleaned first (CleanIcon retired with the
+# The artwork arrives finished - a flat black tile with the sā and the gold स,
+# flat exterior - so nothing is cleaned first (CleanIcon retired with the
 # previous artwork, which carried a ring, waveform bars and a credit line).
 # MakeIcon takes the silhouette from the artwork's alpha channel, since a black
 # tile on transparency has no brightness difference to measure, and fits it to

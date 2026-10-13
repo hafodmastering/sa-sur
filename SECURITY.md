@@ -22,7 +22,7 @@ is real and we agree it matters, acted on when we can. That is the whole promise
 ## Scope
 
 In scope: anything that lets this app do more than convert notes and play a tone
-— memory-safety faults in the DSP or rendering path, a bundle or resource that
+- memory-safety faults in the DSP or rendering path, a bundle or resource that
 can be replaced to execute code, a notarization or signature weakness.
 
 Out of scope: the Gatekeeper prompt on an unnotarized build, audio quality

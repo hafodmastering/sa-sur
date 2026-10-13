@@ -20,7 +20,7 @@ depends on that membership staying paid.
 
 The pre-release line was renumbered retrospectively: the builds of 15–24 Sep
 formerly numbered 1.0–1.4 are **0.9–0.94** (the `v1.4` git tag was renamed
-`v0.94`), and the first build named **SA-Sur** — new name and app icon, 30 Sep —
+`v0.94`), and the first build named **SA-Sur** - new name and app icon, 30 Sep -
 is **0.95**. The first public release is **1.0**, bumped when the build is signed
 off by both studios; it may differ from 0.95 only in the version string.
 
@@ -29,7 +29,7 @@ Per release, bump `CFBundleShortVersionString` (and the monotonic
 
 ---
 
-## Step 1 — Aditya, once
+## Step 1 - Aditya, once
 
 All of this runs on the existing Sudeep Audio membership at no extra cost. The
 Apple Developer Program has no per-seat fee, and there is no second subscription
@@ -38,22 +38,22 @@ to buy.
 ### 1a. Promote Donal to Admin
 
 Apple's role matrix puts "Create Developer ID certificates" in the **Account
-Holder** column only — a member with the *Developer* role cannot do it. Admin is a
+Holder** column only - a member with the *Developer* role cannot do it. Admin is a
 free role change in App Store Connect. Required role to change a role: **Account
 Holder or Admin**.
 
-1. Sign in at **appstoreconnect.apple.com** as the Account Holder — the Apple
+1. Sign in at **appstoreconnect.apple.com** as the Account Holder - the Apple
    Account that enrolled Sudeep Audio. Team roles live there, not on the developer
    website.
 2. Open **Users and Access**.
 3. Find Donal by Apple Account email. If he is not listed, the invitation he was
-   sent may have expired — re-invite him as **Admin** rather than Developer, and
+   sent may have expired - re-invite him as **Admin** rather than Developer, and
    have him accept it before continuing.
 4. Click his user record, set **Roles → Admin**, and **Save**.
 5. On the same record, enable **Access to Certificates, Identifiers & Profiles**.
    Admin is eligible for this, but it is a separate permission and off by default.
    Without it, Admin sees no certificates area at all.
-6. If the account shows any outstanding updated agreement, accept it first —
+6. If the account shows any outstanding updated agreement, accept it first -
    pending agreements can block access to Certificates, Identifiers & Profiles for
    the whole team.
 7. Have Donal sign in at appstoreconnect.apple.com and confirm his role reads
@@ -67,8 +67,8 @@ signing than an app-specific password.
 documents cloud-managed signing as an *Xcode Organizer archive and distribution*
 workflow, where Xcode cloud signs "if you're using the Xcode Organizer archive and
 distribution workflow, and a local signing certificate is not found". SA-Sur is
-built with `swiftc` and a hand-assembled bundle — no Xcode project, no Organizer
-archive — and `codesign` needs a signing identity present in a keychain. So the
+built with `swiftc` and a hand-assembled bundle - no Xcode project, no Organizer
+archive - and `codesign` needs a signing identity present in a keychain. So the
 cloud-managed route cannot produce the signed bundle this build needs, whatever
 the role says.
 
@@ -76,14 +76,14 @@ the role says.
 
 Only the Account Holder can create this (up to five *Developer ID Application*
 certificates per team). Do it as a **CSR round-trip** so nothing secret ever
-changes hands — Donal holds the private key from the start and only the public
+changes hands - Donal holds the private key from the start and only the public
 request travels:
 
 1. **Donal**, in Keychain Access → **Certificate Assistant → Request a Certificate
    from a Certificate Authority**: enter his email, a Common Name such as
    `Hafod Mastering Developer ID`, select **Saved to disk**, and save
    `DeveloperID.certSigningRequest`. His private key stays in his login keychain.
-2. **Donal** sends the `.certSigningRequest` to Aditya. It is a public key — email
+2. **Donal** sends the `.certSigningRequest` to Aditya. It is a public key - email
    is fine.
 3. **Aditya**, at developer.apple.com → **Certificates, Identifiers & Profiles** →
    **Certificates** → **+** → **Developer ID Application** → upload the CSR →
@@ -95,7 +95,7 @@ request travels:
    **E37W7LU474**.
 5. **Donal** double-clicks the `.cer`. It pairs with the private key already in his
    keychain, and the identity appears as
-   `Developer ID Application: Sudeep Audio.com LLP (E37W7LU474)` — Apple issues it
+   `Developer ID Application: Sudeep Audio.com LLP (E37W7LU474)` - Apple issues it
    under the team's legal name, and that is the string `codesign` and
    `tools/notarize.sh` expect.
 
@@ -103,7 +103,7 @@ request travels:
 can create the certificate in Xcode → Settings → Accounts → Manage Certificates →
 **+ → Developer ID Application**, then Control-click the certificate → **Export
 Certificate** → `.p12` with a strong password. Note that the private key then lives
-in *his* keychain, so the `.p12` **and** its password must both reach Donal — over
+in *his* keychain, so the `.p12` **and** its password must both reach Donal - over
 a password manager, with the password sent through a different channel. A `.p12`
 whose password travels in the same channel is a leak. The CSR route above avoids
 this entirely and is preferable.
@@ -112,7 +112,7 @@ Either way this is a **once-every-five-years** action, not a per-release one: a
 Developer ID certificate is valid for five years and Apple allows up to five of
 them per team.
 
-## Step 2 — Donal, once per machine
+## Step 2 - Donal, once per machine
 
 ```sh
 # 1. Import the certificate. With the CSR round-trip this is the .cer from Aditya,
@@ -145,7 +145,7 @@ Notarizing needs no special role: Apple's matrix grants "Notarize software" to t
 Account Holder, Admin, App Manager **and** Developer, so Donal's own Apple ID can
 submit for notarization today. *Signing* is the part that needs the certificate.
 
-The profile name `notefrequency` is what `tools/notarize.sh` reads — a keychain
+The profile name `notefrequency` is what `tools/notarize.sh` reads - a keychain
 label kept from the original setup; the name has no functional meaning. Override
 with the `NOTARY_PROFILE` environment variable if you prefer another.
 
@@ -153,7 +153,7 @@ Housekeeping after a `.p12` import: delete the file from both machines and keep
 exactly one offline copy in a password manager. Only the Account Holder can issue
 a replacement certificate, so a lost private key is a problem for the whole team.
 
-## Step 3 — Build and notarize, per release
+## Step 3 - Build and notarize, per release
 
 Bump `CFBundleShortVersionString`/`CFBundleVersion` in `Info.plist` and
 `VERSION` in `build.sh` **together** before starting.
@@ -174,7 +174,7 @@ accepted, source=Notarized Developer ID
 
 Anything else is a failed release; the raw `notarytool` log is the place to look.
 
-## Step 4 — Publish
+## Step 4 - Publish
 
 ```sh
 shasum -a 256 build/SA-Sur-<version>-notarized.zip
@@ -184,17 +184,17 @@ git push origin main --tags
 ```
 
 Then create a GitHub Release at that tag, attach the **notarized** zip (the
-repackaged one from step 3 — the ticket only travels inside an archive built
+repackaged one from step 3 - the ticket only travels inside an archive built
 *after* stapling), and paste the SHA-256 into the release notes.
 
-## Step 5 — Prove it, on a machine that has never seen the app
+## Step 5 - Prove it, on a machine that has never seen the app
 
 The whole point of notarization is the recipient's experience, and Gatekeeper only
-assesses a file that carries the quarantine flag — so testing from a local copy
+assesses a file that carries the quarantine flag - so testing from a local copy
 proves nothing.
 
 1. Download the asset from the published Release page in a browser (not `scp`, not
-   a network share — those do not add the quarantine attribute).
+   a network share - those do not add the quarantine attribute).
 2. Unzip by double-clicking, drag to `/Applications`, launch.
 3. Expect the ordinary "downloaded from the internet" confirmation, and no
    System Settings excursion. Confirm the publisher shown is `Sudeep Audio.com LLP`.
@@ -204,7 +204,7 @@ xattr -p com.apple.quarantine /Applications/SA-Sur.app   # should be present
 spctl -a -vvv -t exec /Applications/SA-Sur.app           # accepted, source=Notarized Developer ID
 ```
 
-If step 5 fails, the release is not published yet — delete the release and go back
+If step 5 fails, the release is not published yet - delete the release and go back
 to step 3.
 
 ---
@@ -214,7 +214,7 @@ to step 3.
 Not yet decided: stack, and whether it happens before or after the macOS release.
 Whichever is chosen, the Windows artifact carries the same `LICENSE` and `NOTICE`,
 ships from the same tag, and its release notes carry a SHA-256. See the Windows
-section of the project notes for the signing position — the short version is that
+section of the project notes for the signing position - the short version is that
 an unsigned `.exe` plus a published hash is the same trade already made on macOS
 before notarization, at £0, and a purchased certificate would still warn until
 reputation accrues.
@@ -225,4 +225,4 @@ Existing releases keep working forever, whether or not the membership lapses.
 What stops is the ability to sign and notarize **new** builds under the same team
 identity. If Hafod Mastering later wants macOS releases not to depend on Sudeep
 Audio's account and renewal, that means a second Apple Developer Program
-membership and a new signing identity — worth knowing as a cost, not a blocker.
+membership and a new signing identity - worth knowing as a cost, not a blocker.

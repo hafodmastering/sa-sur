@@ -97,7 +97,7 @@ if [ "$MODE" = "store" ]; then
     ENT_APP_ID="$(/usr/libexec/PlistBuddy -c "Print :com.apple.application-identifier" "$ENTITLEMENTS" 2>/dev/null || true)"
     if [ "$ENT_APP_ID" != "$TEAM_ID.$BUNDLE_ID" ]; then
         echo "FAIL: $ENTITLEMENTS declares application-identifier '$ENT_APP_ID'," >&2
-        echo "      but the bundle is $TEAM_ID.$BUNDLE_ID — App Store validation would reject it." >&2
+        echo "      but the bundle is $TEAM_ID.$BUNDLE_ID - App Store validation would reject it." >&2
         exit 2
     fi
     echo "    application-identifier $ENT_APP_ID (entitlements, profile and bundle agree)"

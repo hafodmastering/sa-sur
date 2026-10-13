@@ -43,7 +43,7 @@ Requires only the Xcode **Command Line Tools**: no Xcode, no project file, no pa
 ./verify.sh   # test.sh, then the audio graph rendered offline, then the UI render
 ```
 
-**A build from the source is not notarized**, so Gatekeeper will block it — it carries no Developer ID and no notarization ticket. To open your own build:
+**A build from the source is not notarized**, so Gatekeeper will block it - it carries no Developer ID and no notarization ticket. To open your own build:
 
 ```sh
 xattr -dr com.apple.quarantine /Applications/SA-Sur.app
@@ -69,7 +69,7 @@ docs/RELEASE.md            signing, notarizing and publishing a release
 
 ## Licence and marks
 
-**Apache License 2.0** — see [LICENSE](LICENSE) and [NOTICE](NOTICE). Copyright © 2026 Hafod Mastering Ltd and Sudeep Audio. Use it, modify it, redistribute it, sell it, including inside closed-source products; keep the notices, and state significant changes. It is published free of charge: there is no paid edition or support contract.
+**Apache License 2.0** - see [LICENSE](LICENSE) and [NOTICE](NOTICE). Copyright © 2026 Hafod Mastering Ltd and Sudeep Audio. Use it, modify it, redistribute it, sell it, including inside closed-source products; keep the notices, and state significant changes. It is published free of charge: there is no paid edition or support contract.
 
 The names, logos and marks of Hafod Mastering and Sudeep Audio, and the **SA-Sur** name and app artwork, are not licensed with the code (Apache-2.0 §6). Forks are welcome; forks presented as coming from, co-branded with, or endorsed by either company are not. If you ship a modified build, replace those marks or remove them.
 

@@ -1,6 +1,6 @@
-# Support — SA-Sur
+# Support - SA-Sur
 
-SA-Sur — *know your note, know your frequency* — shows the frequency of any note in twelve-tone equal temperament and plays it as a sine tone. It is a single-window Mac app for macOS 13 or later, Apple Silicon and Intel.
+SA-Sur - *know your note, know your frequency* - shows the frequency of any note in twelve-tone equal temperament and plays it as a sine tone. It is a single-window Mac app for macOS 13 or later, Apple Silicon and Intel.
 
 ## Using it
 
@@ -10,7 +10,7 @@ Everything is in one window: click a note and an octave, adjust the concert-A re
 
 - **Installed from the App Store:** reinstalling from the App Store fixes most install problems.
 - **A build you made yourself:** if macOS blocks it, that is the ordinary Gatekeeper prompt for an unnotarized build. See the *Build* section of the README for the explanation and the one-line fix, or use System Settings → Privacy & Security → Open Anyway.
-- **Anything else:** the app is small and finished. The source is open (Apache-2.0) — paste it into your favourite AI assistant and have whatever bothers you looked at, changed, or ported. That is genuinely the fastest route.
+- **Anything else:** the app is small and finished. The source is open (Apache-2.0) - paste it into your favourite AI assistant and have whatever bothers you looked at, changed, or ported. That is genuinely the fastest route.
 - **A security problem:** see [SECURITY.md](../SECURITY.md).
 
 ## What "support" means here
