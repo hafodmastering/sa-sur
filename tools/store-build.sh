@@ -151,6 +151,17 @@ cp "$ROOT/Info.plist" "$APP/Contents/Info.plist"
 cp "$BUILD/AppIcon.icns" "$APP/Contents/Resources/AppIcon.icns"
 cp "$BUILD/logos/sudeep-audio.png" "$BUILD/logos/hafod-mastering.png" "$APP/Contents/Resources/"
 cp "$MANIFEST" "$APP/Contents/Resources/PrivacyInfo.xcprivacy"
+
+echo "==> manual"
+# docs/MANUAL.md -> docs/SA-Sur-User-Manual.pdf is rendered by tools/manual.sh,
+# which also checks the PDF. The manual is a resource, so it has to be here before
+# the signing step: a signed bundle cannot gain one afterwards, and the Help item
+# in the app opens it by name.
+if [ ! -f "$ROOT/docs/SA-Sur-User-Manual.pdf" ]; then
+    echo "FAIL: no docs/SA-Sur-User-Manual.pdf - run tools/manual.sh" >&2
+    exit 1
+fi
+cp "$ROOT/docs/SA-Sur-User-Manual.pdf" "$APP/Contents/Resources/SA-Sur-Manual.pdf"
 printf 'APPL????' > "$APP/Contents/PkgInfo"
 plutil -lint "$APP/Contents/Info.plist" "$APP/Contents/Resources/PrivacyInfo.xcprivacy"
 
