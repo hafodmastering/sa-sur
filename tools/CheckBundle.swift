@@ -3,6 +3,7 @@
 
 import AppKit
 import Foundation
+import PDFKit
 
 // Post-build gate: confirms the hand-assembled bundle is complete and that every
 // resource the app looks up *by name* actually resolves, which is the thing most
@@ -55,6 +56,21 @@ for name in ["sudeep-audio", "hafod-mastering"] {
 let iconPath = bundle.bundlePath + "/Contents/Resources/AppIcon.icns"
 check("AppIcon.icns", FileManager.default.fileExists(atPath: iconPath),
       FileManager.default.fileExists(atPath: iconPath) ? "present" : "missing")
+
+// The manual ships in the bundle and the Help item opens it by name, so a bundle
+// without it is a bundle whose Help menu is dead.
+if let manual = bundle.url(forResource: "SA-Sur-Manual", withExtension: "pdf"),
+   let document = PDFDocument(url: manual) {
+    var manualBytes = 0
+    if let attributes = try? FileManager.default.attributesOfItem(atPath: manual.path),
+       let size = attributes[.size] as? Int {
+        manualBytes = size
+    }
+    check("SA-Sur-Manual.pdf", document.pageCount > 0,
+          "\(document.pageCount) pages, \(manualBytes) bytes")
+} else {
+    check("SA-Sur-Manual.pdf", false, "not found by name in the bundle")
+}
 
 if let executable = bundle.executableURL {
     var isDirectory: ObjCBool = false

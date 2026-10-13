@@ -11,11 +11,11 @@ ARCH="$(uname -m)"
 TARGET="$ARCH-apple-macos13.0"
 mkdir -p "$ROOT/build/tools"
 
-echo "############ 1/3  maths + oscillator tests ############"
+echo "############ 1/4  maths + oscillator tests ############"
 "$ROOT/test.sh"
 
 echo
-echo "############ 2/3  audio graph smoke test ############"
+echo "############ 2/4  audio graph smoke test ############"
 swiftc -O -target "$TARGET" -sdk "$SDK" \
     "$ROOT/src/NoteMath.swift" \
     "$ROOT/src/SineOscillator.swift" \
@@ -25,7 +25,7 @@ swiftc -O -target "$TARGET" -sdk "$SDK" \
 "$ROOT/build/tools/AudioSmoke"
 
 echo
-echo "############ 3/3  UI render ############"
+echo "############ 3/4  UI render ############"
 "$ROOT/tools/stage-logos.sh" > /dev/null
 swiftc -O -target "$TARGET" -sdk "$SDK" \
     "$ROOT/src/NoteMath.swift" \
@@ -35,6 +35,13 @@ swiftc -O -target "$TARGET" -sdk "$SDK" \
     "$ROOT/tools/screenshot/main.swift" \
     -o "$ROOT/build/tools/Snapshot"
 SASUR_LOGOS="$ROOT/build/logos" "$ROOT/build/tools/Snapshot" "$ROOT/build/ui-snapshot"
+
+echo
+echo "############ 4/4  manual ############"
+# Rebuilds the manual's HTML from docs/MANUAL.md and reads the shipped PDF back:
+# page count, page size, the sections a reader navigates by, all 108 frequencies
+# against docs/note-table.csv, and the house style (no em dashes, no banned words).
+"$ROOT/tools/manual.sh"
 
 echo
 echo "VERIFY: all stages completed"
