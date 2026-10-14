@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  The package manifest for the Microsoft Store build of SA-Sur.
+
+  This is written by hand on purpose. Microsoft's project-level MSIX support covers its own app
+  models: a Windows App SDK project (WinUI 3) packages itself, and a WPF/WinForms project gets a
+  Windows Application Packaging Project in Visual Studio. An Avalonia app is neither, so the
+  manifest the wizard would have written is written here - it is static XML and knows nothing
+  about what drew the UI. `pack-msix.ps1` substitutes the four __TOKEN__ values from
+  `store-identity.psd1` and hands the result to MakeAppx, which validates it against the schema.
+
+  Two of the tokens are Partner Center's, not ours: Identity/@Name and Identity/@Publisher must
+  match the product identity the account displays after the name is reserved, and the Publisher
+  must also equal the subject of whatever certificate signs the package. For a Store submission
+  the Store re-signs it, so the value only has to be self-consistent locally.
+-->
+<Package
+  xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10"
+  xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10"
+  xmlns:rescap="http://schemas.microsoft.com/appx/manifest/foundation/windows10/restrictedcapabilities"
+  IgnorableNamespaces="uap rescap">
+
+  <Identity
+    Name="__PACKAGE_NAME__"
+    Publisher="__PUBLISHER__"
+    Version="__VERSION__"
+    ProcessorArchitecture="x64" />
+
+  <Properties>
+    <DisplayName>SA-Sur : Note to Frequency</DisplayName>
+    <PublisherDisplayName>__PUBLISHER_DISPLAY_NAME__</PublisherDisplayName>
+    <Logo>Assets\StoreLogo.png</Logo>
+    <Description>A single-window note-to-frequency utility: click a note, read its frequency, and hear it as a sine tone. Free of charge under Apache-2.0.</Description>
+  </Properties>
+
+  <Dependencies>
+    <!-- Windows 10 1809 is the oldest build with the desktop app model this package uses. -->
+    <TargetDeviceFamily Name="Windows.Desktop" MinVersion="10.0.17763.0" MaxVersionTested="10.0.26100.0" />
+  </Dependencies>
+
+  <Resources>
+    <Resource Language="en-GB" />
+  </Resources>
+
+  <Applications>
+    <!-- EntryPoint="Windows.FullTrustApplication" is what makes this a full-trust desktop app
+         rather than a sandboxed UWP one: the process runs as the user, with the user's own rights,
+         exactly as the downloaded .exe does. -->
+    <Application Id="SASur" Executable="SA-Sur.exe" EntryPoint="Windows.FullTrustApplication">
+      <uap:VisualElements
+        DisplayName="SA-Sur : Note to Frequency"
+        Description="Note to frequency, with sine-tone audition."
+        BackgroundColor="#000000"
+        Square150x150Logo="Assets\Square150x150Logo.png"
+        Square44x44Logo="Assets\Square44x44Logo.png">
+        <uap:DefaultTile
+          Wide310x150Logo="Assets\Wide310x150Logo.png"
+          Square71x71Logo="Assets\Square71x71Logo.png" />
+        <uap:SplashScreen Image="Assets\SplashScreen.png" BackgroundColor="#000000" />
+      </uap:VisualElements>
+    </Application>
+  </Applications>
+
+  <Capabilities>
+    <!-- Mandatory for any Win32 application packaged as MSIX, and a restricted capability: the
+         Store submission has to declare and justify it in the submission's Restricted capabilities
+         field. Without it the package installs and then fails to launch. -->
+    <rescap:Capability Name="runFullTrust" />
+  </Capabilities>
+</Package>

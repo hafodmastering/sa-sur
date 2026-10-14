@@ -5,6 +5,9 @@ build/
 windows/**/bin/
 windows/**/obj/
 
+# Packaging scratch: the publish, the staged layout and the packed MSIX are all reproducible
+windows/packaging/out/
+
 # macOS
 .DS_Store
 

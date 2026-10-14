@@ -9,6 +9,10 @@
     <RootNamespace>SaSur.App</RootNamespace>
     <!-- The shipped file is SA-Sur.exe, not SaSur.App.exe. -->
     <AssemblyName>SA-Sur</AssemblyName>
+    <!-- The app's own icon, embedded so File Explorer, the taskbar and Alt-Tab show it rather than
+         the generic .NET one. Written by windows/packaging/make-assets.sh from the same composed
+         artwork the macOS build puts in AppIcon.icns, so the two platforms cannot drift. -->
+    <ApplicationIcon>SA-Sur.ico</ApplicationIcon>
 
     <!-- A self-contained publish carries a .NET runtime in the download, so trim what the app
          cannot reach: the untrimmed class library includes XML, Data and expression-tree code that
