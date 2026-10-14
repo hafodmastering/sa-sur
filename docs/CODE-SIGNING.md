@@ -54,14 +54,43 @@ Foundation's identity has signed releases for years, so the publisher side is al
 | No proprietary, non-open-source component | ⚠️ see [The marks](#the-marks-disclosed) |
 | Actively maintained | ✅ |
 | Already released in the form to be signed | ✅ SA-Sur 1.0 |
-| Functionality described on its download page | ✅ README and release notes |
+| Functionality described on its download page | ✅ README, and the release notes on the [v1.0 release](https://github.com/hafodmastering/sa-sur/releases/tag/v1.0) |
+| **Download page names the SignPath Foundation** | ✅ the **Code signing** paragraph in the v1.0 release notes - the page the application gives as its Download URL |
 | Sign our own projects and binaries only | ✅ all source and build scripts are ours |
 | Automated, verifiable build; manual approval per release | ✅ `.github/workflows/windows.yml` |
 | Metadata enforced on signed binaries (product name, one product version) | ✅ set in `SaSur.App.csproj` |
-| MFA on GitHub and SignPath for every team member | ⚠️ **2FA on the GitHub account is still outstanding** |
+| MFA on GitHub and SignPath for every team member | ✅ GitHub, all three members, since the week of 6 Oct. GitHub does not expose 2FA publicly, so there is nothing to show on the repository; SignPath accounts come on approval. **The organisation does not yet *require* 2FA** - see below |
 | "Code signing policy" section on the project home page | ✅ README |
 | Privacy policy, or no unrequested data transfer | ✅ `docs/PRIVACY.md` |
 | Uninstallation for anything that installs | n/a - a single `.exe`, no installer |
+
+**On 2FA.** GitHub treats a user's two-factor status as private: its API documentation
+returns it only to the user themselves, through an OAuth `user`-scoped token, and an
+organisation's security details only to an organisation owner. No profile and no
+organisation page carries a 2FA badge, so there is nothing on the repository to point at.
+The condition is met by the account holders confirming it and by their own checks on the
+accounts that sign. All three members have had it since the week of 6 Oct. The organisation
+does not currently *require* it, which is a one-switch change under Organisation settings
+and worth making.
+
+### Where the downloads are, and why the release notes carry the credit
+
+The two half-requirements of a SignPath application are easy to satisfy separately and
+easy to miss together: the **Download URL** must be a page where the software can be
+downloaded **and** that page must name the SignPath Foundation.
+
+Our downloads live on the [v1.0 release](https://github.com/hafodmastering/sa-sur/releases/tag/v1.0).
+The repository's front page names SignPath in two places - the *Install* note and the
+*Code signing policy* section, which carries SignPath's own wording, *"Free code
+signing provided by SignPath.io, certificate by SignPath Foundation"*, together with
+the Authors/Reviewers/Approvers roles - but the front page has no direct download link.
+The release page had the downloads and, until 13 Oct, **no SignPath mention at all**,
+because the sentence was lost when the notes were rewritten for 1.0.
+
+It is now a **Code signing** paragraph in the release notes, so the pinned release page
+satisfies both halves on its own. **Keep that paragraph in every future release's
+notes**: a release list shows only one-line summaries, so a credit that lives anywhere
+other than the notes is invisible to a reader who arrives at a release page.
 
 ### The marks, disclosed
 
@@ -94,12 +123,18 @@ SHA-256 and the signature are the verification route, and the release notes say 
 ### Order of work
 
 1. Merge the policy section and the build workflow. ✅
-2. Get the workflow green on `windows-latest`. ✅ - 1m33s, and the artifact downloaded back hashes
+2. Get the workflow green on `windows-latest`. ✅ - and the artifact downloaded back hashes
    identically to the digest the runner printed.
 3. Cut a public Windows release from the workflow's artifact, with its SHA-256 in the notes. ✅
-   SA-Sur 1.0, attached to the `v1.0` release.
-4. Enable 2FA on the GitHub account, and SignPath accounts for every team member. ⬜
-5. Apply, disclosing the marks. ⬜
-6. Once approved: wire `signpath/github-action-submit-signing-request` into the workflow at the
+   `SA-Sur-1.0-windows.exe`, 37,521,803 bytes, attached to the `v1.0` release alongside
+   `SA-Sur-1.0-MacOS.zip` and `SA-Sur-User-Manual.pdf`.
+4. Make the download page name the SignPath Foundation. ✅ 13 Oct - a **Code signing** paragraph
+   in the v1.0 release notes; see above.
+5. 2FA on GitHub for every team member. ✅ since the week of 6 Oct. **The organisation does not
+   yet require it** - one switch, under Organisation settings, and worth turning on before
+   applying: it turns "we all have 2FA" into an enforced policy, and it removes any member who
+   does not comply.
+6. Apply, giving `releases/tag/v1.0` as the Download URL and disclosing the marks. ⬜
+7. Once approved: wire `signpath/github-action-submit-signing-request` into the workflow at the
    commented step, and add a `signtool verify /pa` readback of the publisher name to the release
    checks - the same discipline the macOS side applies by reading back Gatekeeper's verdict. ⬜
