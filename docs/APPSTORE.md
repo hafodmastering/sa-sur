@@ -1,9 +1,9 @@
 # Mac App Store
 
-SA-Sur is submitted to the Mac App Store as well as published here. The store build
-is the same app from the same source, sandboxed and signed with *Apple
-Distribution* - a second pipeline, not an extension of [RELEASE.md](RELEASE.md),
-and gated by App Review.
+SA-Sur is live on the Mac App Store at version 1.1 (approved and released on
+19 October 2026). The store build is the same app from the same source, sandboxed
+and signed with *Apple Distribution* - a second pipeline, not an extension of
+[RELEASE.md](RELEASE.md), and gated by App Review.
 
 | | Direct download | Mac App Store |
 |---|---|---|

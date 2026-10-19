@@ -37,7 +37,7 @@ The app is signed and notarized by Apple. macOS shows the usual confirmation for
 
 The App Store copy is the same app, sandboxed for the store. Its version number is its own number, because App Review releases it on its own schedule.
 
-### Windows
+### Windows - the download version
 
 Requirements: Windows 10 or later, 64-bit.
 
@@ -46,10 +46,18 @@ Requirements: Windows 10 or later, 64-bit.
 
 There is no installer, and no .NET runtime to add.
 
-The Windows file is not signed yet. Windows therefore shows *"Windows protected your PC"* and the publisher **Unknown publisher** on the first run. Do this:
+The release download is unsigned. Windows therefore shows *"Windows protected your PC"* and the publisher **Unknown publisher** on the first run. Do this:
 
 1. Click *More info*.
 2. Click *Run anyway*.
+
+### Windows - the Microsoft Store version
+
+1. Open the Microsoft Store.
+2. Search for `SA-Sur`.
+3. Click *Get*, then click *Install*.
+
+The Store copy is signed by Microsoft, so it shows no unknown-publisher warning.
 
 ## 3. The window
 
@@ -166,7 +174,7 @@ SA-Sur sends the tone to the default output device of the computer. To use a dif
 - **macOS:** System Settings > Sound.
 - **Windows:** Settings > System > Sound.
 
-SA-Sur follows the new device and continues to play.
+SA-Sur uses the new default device. If the tone stops when you change the device, press Play again.
 
 SA-Sur keeps the audio engine ready after the first time that you play the tone. The next start is therefore immediate. SA-Sur releases the audio device when you close the window.
 
@@ -198,7 +206,7 @@ The command removes the quarantine flag from the app. No administrator password 
 
 ### Windows warns about an unknown publisher
 
-The Windows file is not signed yet. Section 2 gives the two steps.
+The release download is unsigned. Section 2 gives the two steps. The Microsoft Store version is signed by Microsoft and shows no such warning.
 
 ### The App Store version will not open
 
@@ -210,7 +218,7 @@ Read `SECURITY.md` in the repository.
 
 ## 8. Privacy
 
-SA-Sur makes no network connections. It collects no data and it sends no data. There is no analytics, no telemetry, no advertising and no third-party framework.
+SA-Sur makes no network connections. It collects no data and it sends no data. There is no analytics, no telemetry, no advertising and no tracking SDK. The macOS build uses only Apple frameworks; the Windows build uses open-source UI and audio libraries (Avalonia, NAudio) that make no network connections.
 
 SA-Sur stores one setting on the computer: the appearance choice (System, Light or Dark).
 

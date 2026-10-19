@@ -2,6 +2,8 @@ SA-Sur
 
 Note to Frequency.
 
+Copyright 2026 Hafod Mastering Ltd and Sudeep Audio.com LLP
+
 The initial source, the application design and the audio path were written by
 Hafod Mastering Ltd. The app artwork is by Sudeep Audio. The macOS distribution
 is signed and notarized under the Sudeep Audio Apple Developer team. The app is
@@ -12,5 +14,7 @@ Bundled
 
 The Windows build embeds the Nunito typeface (© The Nunito Project Authors,
 SIL Open Font License 1.1; the licence ships in
-windows/SA-Sur.Ui/Assets/Fonts/OFL.txt) and is built on Avalonia UI and NAudio,
-both MIT-licensed.
+windows/SA-Sur.Ui/Assets/Fonts/OFL.txt and is reproduced in
+THIRD-PARTY-NOTICES.md) and is built on Avalonia UI, NAudio, SkiaSharp,
+HarfBuzzSharp, Tmds.DBus.Protocol and the .NET runtime, all MIT-licensed.
+The full copyright lines and licence texts are in THIRD-PARTY-NOTICES.md.

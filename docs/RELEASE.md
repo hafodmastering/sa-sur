@@ -30,7 +30,8 @@ There is no `VERSION` file; the two scripts and `Info.plist` are the whole story
 
 `CFBundleVersion` is a build counter no user ever reads, so it counts **rounds
 project-wide**: the same number on both channels for the round that produced
-them. This round is **build 12** - direct download **1.0**, store **1.1**.
+them. This round is **build 12** - direct download **1.0**, Mac App Store **1.1**,
+Microsoft Store **1.1.1.0** (its own four-part line).
 
 The Windows build carries its own number in
 `windows/SA-Sur.App/SaSur.App.csproj`. It follows the direct-download line, not
@@ -225,16 +226,20 @@ to step 3.
 ## Windows
 
 The Windows build is the same app in C# + Avalonia, carried by its own number in
-`windows/SA-Sur.App/SaSur.App.csproj` and built, tested and packaged by
-`.github/workflows/windows.yml` (`dotnet publish`, single-file, win-x64). Its
-artifact ships from the same tag as the macOS zip, carries the same `LICENSE` and
-`NOTICE`, and its release notes carry a SHA-256.
+`windows/SA-Sur.App/SaSur.App.csproj`. The **direct download** is built, tested
+and published by `.github/workflows/windows.yml` (`dotnet publish`, single-file,
+win-x64). The **Microsoft Store** package is built by
+`windows/packaging/pack-msix.ps1` and carries its own version line (1.1.1.0 in
+Submission 1); the workflow does not build it. Both ship from the same tag as the
+macOS zip. The repository carries `LICENSE` and `NOTICE`, and the release notes
+carry a SHA-256; the binaries must also carry the licence and notices - see
+`THIRD-PARTY-NOTICES.md` and the packaging step below.
 
-It is unsigned for now: an unsigned `.exe` plus a published hash is the same
-trade macOS made before notarization, at £0, and a purchased certificate would
-still warn until reputation accrues. The Microsoft Store is the route that
-removes the prompt altogether - Microsoft re-signs what it publishes - and what
-each channel's signature does and does not prove is in
+The direct download is unsigned: an unsigned `.exe` plus a published hash is the
+same trade macOS made before notarization, at £0, and a purchased certificate
+would still warn until reputation accrues. The Microsoft Store build is signed by
+Microsoft after certification, so it installs without a prompt. What each
+channel's signature does and does not prove is in
 [docs/CODE-SIGNING.md](CODE-SIGNING.md).
 
 ## If the collaboration changes

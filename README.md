@@ -8,7 +8,17 @@ SA-Sur shows the frequency of any note in twelve-tone equal temperament and play
 
 ![SA-Sur, dark appearance](docs/screenshots/ui-snapshot-dark.png)
 
-**Version 1.0.** Free, Apache-2.0, released by **Hafod Mastering** and **Sudeep Audio**.
+**Version 1.0** for the direct download. Free, Apache-2.0, released by **Hafod Mastering** and **Sudeep Audio**.
+
+## Release channels
+
+| Channel | Version | State |
+|---|---|---|
+| GitHub release (direct download) | 1.0 | Live since 7 October 2026 |
+| Mac App Store | 1.1 | Live since 19 October 2026 |
+| Microsoft Store | 1.1.1.0 | Submitted, in certification |
+
+The source is the same in all three. The Mac App Store build is sandboxed and is distributed under Apple's Standard EULA; the Microsoft Store build is distributed under Microsoft's Standard Application License Terms. The GitHub download is Apache-2.0. See [Licence and marks](#licence-and-marks).
 
 ## Install
 
@@ -16,11 +26,11 @@ SA-Sur shows the frequency of any note in twelve-tone equal temperament and play
 
 **Windows 10 or later, 64-bit.** Download `SA-Sur-1.0-windows.exe` from [Releases](../../releases) and run it: it is self-contained, so there is nothing to install and no .NET runtime to add. The manual for that build is attached to the same release as `SA-Sur-User-Manual.pdf`, because the Windows app has no Help menu.
 
-The Windows build is **not signed**, so SmartScreen shows *"Windows protected your PC"* with an unknown publisher - choose *More info → Run anyway*. The **Microsoft Store** is the route that removes that prompt rather than softening it, because Microsoft re-signs whatever it publishes; that listing is being prepared. [docs/CODE-SIGNING.md](docs/CODE-SIGNING.md) records what each signature does and does not prove.
+The Windows build is **not signed**, so SmartScreen shows *"Windows protected your PC"* with an unknown publisher - choose *More info → Run anyway*. The **Microsoft Store** is the route that removes that prompt rather than softening it, because Microsoft re-signs whatever it publishes; that listing is in certification. [docs/CODE-SIGNING.md](docs/CODE-SIGNING.md) records what each signature does and does not prove.
 
-The feature set matches the macOS app, and audio goes to the default Windows output device.
+The controls and audio behaviour match the macOS app; the Windows build has no Help menu, so the manual is the PDF attached to the release. Audio goes to the default Windows output device.
 
-**Mac App Store.** SA-Sur is submitted there as **1.1** - a separate, sandboxed artifact on App Review's own clock. See [docs/APPSTORE.md](docs/APPSTORE.md).
+**Mac App Store.** SA-Sur **1.1** is live there - a separate, sandboxed artifact. See [docs/APPSTORE.md](docs/APPSTORE.md).
 
 ## Use
 
@@ -34,7 +44,7 @@ The feature set matches the macOS app, and audio goes to the default Windows out
 | Copy icon | Copies the number to the clipboard, without the unit |
 | Decimals stepper | 0–6 decimal places |
 | Display icon | Toggles between light mode, dark mode and system mode |
-| Help → SA-Sur User Manual | Opens the manual |
+| Help → SA-Sur User Manual (macOS) | Opens the manual |
 
 The app opens at **A4, octave 4, 440 Hz → 440.00 Hz**, two decimal places. Notes run `C C# D Eb E F F# G G# A Bb B`; octaves run 0–8 (C0 = 16.35 Hz, B8 = 7902.13 Hz).
 
@@ -88,7 +98,9 @@ windows/                   the same app in C# + Avalonia (Core, Audio, Ui, App)
 
 ## Licence and marks
 
-**Apache License 2.0** - see [LICENSE](LICENSE) and [NOTICE](NOTICE). Copyright © 2026 Hafod Mastering Ltd and Sudeep Audio. Use it, modify it, redistribute it, sell it, including inside closed-source products; keep the notices, and state significant changes. It is published free of charge: there is no paid edition or support contract.
+**Apache License 2.0** - see [LICENSE](LICENSE), [NOTICE](NOTICE) and [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md). Copyright © 2026 Hafod Mastering Ltd and Sudeep Audio.com LLP. Use it, modify it, redistribute it, sell it, including inside closed-source products; keep the notices, and state significant changes. It is published free of charge: there is no paid edition or support contract.
+
+**Store builds.** The source and the GitHub download are Apache-2.0. A build downloaded from the Mac App Store is distributed under Apple's Standard EULA; a build downloaded from the Microsoft Store is distributed under Microsoft's Standard Application License Terms. The same source is available here under Apache-2.0.
 
 The names, logos and marks of Hafod Mastering and Sudeep Audio, and the **SA-Sur** name and app artwork, are not licensed with the code (Apache-2.0 §6). Forks are welcome; forks presented as coming from, co-branded with, or endorsed by either company are not. If you ship a modified build, replace those marks or remove them.
 
@@ -101,8 +113,7 @@ The names, logos and marks of Hafod Mastering and Sudeep Audio, and the **SA-Sur
 **Team roles**
 
 - **Authors** - commit to the repository directly: [members of the organisation](https://github.com/orgs/hafodmastering/people) (Donal Whelan, Gethin John, Aditya Mehta).
-- **Reviewers** - changes proposed by anyone else are reviewed by a team member before merge.
-- **Approvers** - one person approves each signing request: Donal Whelan.
+- **Signing** - Donal Whelan signs and notarizes the macOS build; Microsoft signs the Store package as part of publishing.
 
 **Privacy.** SA-Sur makes no network connections and collects nothing; see [docs/PRIVACY.md](docs/PRIVACY.md). **This program will not transfer any information to other networked systems unless specifically requested by the user or the person installing or operating it.**
 
@@ -110,7 +121,7 @@ The names, logos and marks of Hafod Mastering and Sudeep Audio, and the **SA-Sur
 
 SA-Sur does one job in our studio. You're welcome to change it to suit yours. We don't offer support, review pull requests or collect feature requests; a tool like this is worth having because it is shaped to one studio's way of working.
 
-That is the whole reason the source is here. `src/` is about 680 lines of Swift and the frequency maths is one line of it, so make it yours. Paste the source into whichever AI assistant you already use and ask:
+That is the whole reason the source is here. `src/` is about 610 lines of Swift and the frequency maths is one line of it, so make it yours. Paste the source into whichever AI assistant you already use and ask:
 
 - *"Add a cents-deviation readout against A=440 to `src/NoteMath.swift`, and extend `tests/main.swift` to cover it."*
 - *"Rewrite `src/Views.swift` with my studio's colours, and drop the two bundled marks."*

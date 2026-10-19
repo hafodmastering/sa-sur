@@ -4,11 +4,13 @@ SA-Sur is released by **Hafod Mastering Ltd** and **Sudeep Audio.com LLP** toget
 
 The short version: **nothing leaves your machine.**
 
-*Applies to SA-Sur 1.0 and later. Last updated: 6 October 2026.*
+*Applies to SA-Sur 1.0 and later. Last updated: 20 October 2026.*
 
 ## What the app collects
 
-Nothing. SA-Sur has no analytics, no telemetry, no advertising, no accounts and no third-party frameworks. The app makes no network connections of its own.
+Nothing. SA-Sur has no analytics, no telemetry, no advertising, no accounts and no tracking SDKs. The macOS build uses only Apple frameworks. The Windows build uses open-source UI and audio libraries (Avalonia, NAudio and their dependencies), which make no network connections. The app makes no network connections of its own.
+
+The Microsoft Store declares the `runFullTrust` capability because this is a desktop app that plays audio through the system output device; that declaration is not a data collection. The app still collects nothing.
 
 ## What the app stores
 

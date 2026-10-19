@@ -36,7 +36,8 @@ the package identity *and* into the binary, the same rule `tools/store-build.sh`
 store build.
 
 **State.** The package is built, verified and uploaded to Partner Center, and the store listing is
-complete. Nothing has been submitted for certification yet, which is the next step.
+complete. Submission 1 (`SA-Sur_1.1.1.0_x64.msix`) is **in certification**; publishing is manual,
+so nothing becomes public until *Publish now* is pressed after certification passes.
 
 ## What was considered, and why this is the route
 
