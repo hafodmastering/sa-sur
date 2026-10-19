@@ -1,23 +1,22 @@
 # The single place the Microsoft Store packaging gets its identity from.
 #
-# Three of these four values are NOT ours to choose: they come from Partner Center, after the
-# product name is reserved. The values below are working placeholders so the package can be built,
-# installed and tested locally; they are marked so that nobody ships them.
+# These four values came from Partner Center -> Product identity, after the product name was
+# reserved. They are NOT ours to choose and the manifest must match them exactly.
 #
 #   PackageName          Partner Center -> Product identity -> Package/Identity/Name
-#                        (convention: Publisher.Name, e.g. SudeepAudioLLP.SASur)
 #   Publisher            Partner Center -> Product identity -> Package/Identity/Publisher
-#                        e.g. CN=Sudeep Audio.com LLP for a company account
-#   PublisherDisplayName Partner Center -> Account settings -> Publisher display name
+#                        Generated at reservation: CN=<guid> for this account, not the company name.
+#   PublisherDisplayName Partner Center -> Product identity -> Publisher display name
 #   Version              ours, and the Store line's own number: four parts, the last always 0
 #                        (Partner Center reserves the revision field), increasing every submission.
 #
-# The Publisher value must also be the subject of the certificate that signs the package. For a
-# Store submission that is a formality - the Store re-signs and ignores our signature - but it is
-# what lets the package be installed and tested here first.
+# The Publisher value is also the subject of any certificate that signs the package for local
+# testing. For a Store submission the signature is a formality - the Store re-signs - but the
+# resulting package family name is a check that the identity is right: it must match the PFN
+# Partner Center reports for the product (SudeepAudio.SA-Sur_sc5pm0db8zg9r when this was written).
 @{
-    PackageName          = 'SudeepAudioLLP.SASur'   # PLACEHOLDER - replace from Partner Center
-    Publisher            = 'CN=Sudeep Audio.com LLP' # PLACEHOLDER - replace from Partner Center
-    PublisherDisplayName = 'Sudeep Audio.com LLP'    # PLACEHOLDER - replace from Partner Center
-    Version              = '1.1.0.0'                 # the Store line: stamped, never inherited
+    PackageName          = 'SudeepAudio.SA-Sur'
+    Publisher            = 'CN=5A16320F-B976-49A4-9FDF-FEA82A152D92'
+    PublisherDisplayName = 'Sudeep Audio'
+    Version              = '1.1.0.0'
 }
