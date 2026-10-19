@@ -232,8 +232,9 @@ artifact ships from the same tag as the macOS zip, carries the same `LICENSE` an
 
 It is unsigned for now: an unsigned `.exe` plus a published hash is the same
 trade macOS made before notarization, at £0, and a purchased certificate would
-still warn until reputation accrues. The signing position - SignPath Foundation,
-and what that signature does and does not prove - is in
+still warn until reputation accrues. The Microsoft Store is the route that
+removes the prompt altogether - Microsoft re-signs what it publishes - and what
+each channel's signature does and does not prove is in
 [docs/CODE-SIGNING.md](CODE-SIGNING.md).
 
 ## If the collaboration changes

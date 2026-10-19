@@ -1,9 +1,8 @@
 # Builds, tests and packages the Windows build.
 #
-# It is the honest way to check the app on a machine that is not the author's, and it is a hard
-# prerequisite for the code signing route, because SignPath Foundation only signs artifacts that
-# are automated builds of the public source. The macOS build keeps its own release process; this
-# workflow only touches windows/.
+# It is the honest way to check the app on a machine that is not the author's, and it produces the
+# artifact that is packaged for the Microsoft Store. The macOS build keeps its own release process;
+# this workflow only touches windows/.
 name: Windows
 
 on:
@@ -63,21 +62,9 @@ jobs:
           "sha256   : $((Get-FileHash $exe -Algorithm SHA256).Hash.ToLower())"
           "version  : $($exe.VersionInfo.ProductVersion)"
 
-      # Signing happens here once SignPath Foundation has approved the project. Their requirements:
-      # a manual approval per release, and metadata restrictions enforced on every signed binary
-      # (product name = project name, one product version per build) - which the .csproj already
-      # sets. See docs/CODE-SIGNING.md for the state of that.
-      #
-      # - name: Sign
-      #   uses: signpath/github-action-submit-signing-request@v1
-      #   with:
-      #     api-token: ${{ secrets.SIGNPATH_API_TOKEN }}
-      #     organization-id: ${{ vars.SIGNPATH_ORGANIZATION_ID }}
-      #     project-slug: sa-sur
-      #     signing-policy-slug: release-signing
-      #     artifact-configuration-slug: exe
-      #     github-artifact-id: ${{ steps.upload.outputs.artifact-id }}
-      #     wait-for-completion: true
+      # No signing step: Windows trust comes from the Microsoft Store, which re-signs the MSIX that is
+      # built from this artifact. See docs/CODE-SIGNING.md. The .exe published on the release page is
+      # deliberately unsigned and is verified by the SHA-256 printed above.
 
       - uses: actions/upload-artifact@v7
         id: upload

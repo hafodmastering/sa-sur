@@ -16,7 +16,7 @@ SA-Sur shows the frequency of any note in twelve-tone equal temperament and play
 
 **Windows 10 or later, 64-bit.** Download `SA-Sur-1.0-windows.exe` from [Releases](../../releases) and run it: it is self-contained, so there is nothing to install and no .NET runtime to add. The manual for that build is attached to the same release as `SA-Sur-User-Manual.pdf`, because the Windows app has no Help menu.
 
-The Windows build is **not signed yet**, so SmartScreen shows *"Windows protected your PC"* with an unknown publisher - choose *More info → Run anyway*. Signing is in progress through [SignPath Foundation](https://signpath.org/); [docs/CODE-SIGNING.md](docs/CODE-SIGNING.md) records where that stands and what the signature will and will not prove.
+The Windows build is **not signed**, so SmartScreen shows *"Windows protected your PC"* with an unknown publisher - choose *More info → Run anyway*. The **Microsoft Store** is the route that removes that prompt rather than softening it, because Microsoft re-signs whatever it publishes; that listing is being prepared. [docs/CODE-SIGNING.md](docs/CODE-SIGNING.md) records what each signature does and does not prove.
 
 The feature set matches the macOS app, and audio goes to the default Windows output device.
 
@@ -94,11 +94,9 @@ The names, logos and marks of Hafod Mastering and Sudeep Audio, and the **SA-Sur
 
 ## Code signing policy
 
-Free code signing provided by [SignPath.io](https://about.signpath.io/), certificate by [SignPath Foundation](https://signpath.org/).
-
 **macOS.** Releases are signed with an Apple *Developer ID Application* certificate issued to **Sudeep Audio.com LLP** and notarized by Apple, so Gatekeeper reports `accepted, source=Notarized Developer ID`. The steps are in [docs/RELEASE.md](docs/RELEASE.md).
 
-**Windows.** Under application to SignPath Foundation - [docs/CODE-SIGNING.md](docs/CODE-SIGNING.md) records the state of it.
+**Windows.** The direct download is unsigned and is checked by the SHA-256 published with the release. The Microsoft Store build is signed by Microsoft as part of publishing, so it installs without a prompt. What each of those proves - and what none of them proves - is in [docs/CODE-SIGNING.md](docs/CODE-SIGNING.md).
 
 **Team roles**
 
