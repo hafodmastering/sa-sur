@@ -18,5 +18,5 @@
     PackageName          = 'SudeepAudio.SA-Sur'
     Publisher            = 'CN=5A16320F-B976-49A4-9FDF-FEA82A152D92'
     PublisherDisplayName = 'Sudeep Audio'
-    Version              = '1.1.0.0'
+    Version              = '1.1.1.0'
 }
