@@ -12,10 +12,22 @@ using SaSur.Ui;
 
 namespace SaSur.App.Tests;
 
-public class AppHostTests
+public class AppHostTests : IDisposable
 {
     private static readonly object SetupGate = new();
     private static bool _started;
+
+    private SaSur.App.MainWindow? _window;
+
+    // xunit builds a new instance per test, so closing here retires the window before the next
+    // test runs. The headless host keeps every window it is given alive, and pointer input then
+    // arrives at whichever one is active, which made the click helpers order-dependent.
+    public void Dispose()
+    {
+        _window?.Close();
+        _window = null;
+        Dispatcher.UIThread.RunJobs();
+    }
 
     private static void EnsureHeadless()
     {
@@ -34,10 +46,13 @@ public class AppHostTests
         }
     }
 
-    private static SaSur.App.MainWindow Show(IToneOutput tone)
+    private SaSur.App.MainWindow Show(IToneOutput tone)
     {
         var window = new SaSur.App.MainWindow(tone, new AppSettings());
+        _window = window;
         window.Show();
+        // Pointer input goes to the active window, and this test's window must be it.
+        window.Activate();
         Dispatcher.UIThread.RunJobs();
         return window;
     }
@@ -71,6 +86,29 @@ public class AppHostTests
             RoutedEvent = InputElement.KeyDownEvent,
             Key = Key.Space,
         });
+
+    // A real press, not a synthesized event on the window: it goes through the headless input
+    // stack to whatever holds the focus, which is the path the defect lives on.
+    private static void PressSpace(TopLevel window) =>
+        window.KeyPress(Key.Space, RawInputModifiers.None, PhysicalKey.Space, " ");
+
+    private static void ClickControl(Window window, Control control)
+    {
+        Assert.True(control.Bounds.Width > 0 && control.Bounds.Height > 0,
+            $"{control.Name ?? control.GetType().Name} has bounds {control.Bounds} - it was not laid out, so there is nothing to click");
+
+        var centre = control.TranslatePoint(
+            new Point(control.Bounds.Width / 2, control.Bounds.Height / 2), window);
+        Assert.NotNull(centre);
+
+        // A move first: that is the order a real pointer arrives in, and the headless host keeps
+        // one pointer, so pressing at a new point without moving left the press un-delivered.
+        window.MouseMove(centre.Value);
+        Dispatcher.UIThread.RunJobs();
+        window.MouseDown(centre.Value, MouseButton.Left);
+        window.MouseUp(centre.Value, MouseButton.Left);
+        Dispatcher.UIThread.RunJobs();
+    }
 
     [Fact]
     public void The_window_carries_the_app_icon_not_the_generic_Windows_one()
@@ -167,6 +205,105 @@ public class AppHostTests
 
         Assert.True(tone.IsRunning);
         Assert.Equal("Stop", TransportLabel(window));
+    }
+
+    [Fact]
+    public void Space_starts_the_tone_after_a_note_has_been_clicked()
+    {
+        EnsureHeadless();
+        var tone = new SilentToneOutput();
+        var window = Show(tone);
+        var view = ViewIn(window);
+
+        var c = view.FindControl<StackPanel>("NoteRow")!.Children.OfType<Button>()
+            .Single(b => (string)b.Content! == "C");
+
+        ClickControl(window, c);
+
+        // A click focuses the button. That is the whole defect: the focused Button claims Space
+        // and activates itself, so the transport never sees the key.
+        Assert.True(c.IsFocused, "the click should have focused the note button");
+        Assert.Equal(0, view.Semitone);
+        Assert.False(tone.IsRunning);
+
+        PressSpace(window);
+        Dispatcher.UIThread.RunJobs();
+
+        Assert.True(tone.IsRunning, "Space must start the tone after a note has been clicked");
+        Assert.Equal("Stop", TransportLabel(window));
+        Assert.Equal(0, view.Semitone);
+
+        PressSpace(window);
+        Dispatcher.UIThread.RunJobs();
+
+        Assert.False(tone.IsRunning, "Space must stop the tone again");
+        Assert.Equal("Play", TransportLabel(window));
+    }
+
+    [Theory]
+    [InlineData("OctaveRow", "2")]
+    [InlineData("ConcertRow", "432")]
+    public void Space_starts_the_tone_after_another_button_has_been_clicked(string row, string label)
+    {
+        EnsureHeadless();
+        var tone = new SilentToneOutput();
+        var window = Show(tone);
+        var view = ViewIn(window);
+
+        var button = view.FindControl<StackPanel>(row)!.Children.OfType<Button>()
+            .Single(b => (string)b.Content! == label);
+
+        ClickControl(window, button);
+        Assert.True(button.IsFocused, $"the click should have focused the {label} button");
+
+        PressSpace(window);
+        Dispatcher.UIThread.RunJobs();
+
+        Assert.True(tone.IsRunning, $"Space must start the tone after {label} was clicked");
+        Assert.Equal("Stop", TransportLabel(window));
+    }
+
+    [Fact]
+    public void Space_toggles_the_transport_after_the_transport_itself_was_clicked()
+    {
+        EnsureHeadless();
+        var tone = new SilentToneOutput();
+        var window = Show(tone);
+        var transport = ViewIn(window).FindControl<Button>("TransportButton")!;
+
+        ClickControl(window, transport);
+        Assert.True(tone.IsRunning, "the click should have started the tone");
+        Assert.True(transport.IsFocused, "the click should have focused the transport button");
+
+        PressSpace(window);
+        Dispatcher.UIThread.RunJobs();
+
+        // Once, not twice: the focused button would otherwise toggle it a second time.
+        Assert.False(tone.IsRunning);
+        Assert.Equal("Play", TransportLabel(window));
+    }
+
+    [Fact]
+    public void Space_does_not_activate_the_button_it_was_pressed_over()
+    {
+        EnsureHeadless();
+        var tone = new SilentToneOutput();
+        var window = Show(tone);
+        var view = ViewIn(window);
+
+        // The decimals chevrons are built in code, so FindControl's namescope cannot see them.
+        var up = view.GetVisualDescendants().OfType<Button>().Single(b => b.Name == "DecimalsUp");
+
+        ClickControl(window, up);
+        Assert.True(up.IsFocused, "the click should have focused the chevron");
+
+        var decimals = view.Decimals;
+
+        PressSpace(window);
+        Dispatcher.UIThread.RunJobs();
+
+        Assert.True(tone.IsRunning, "Space must start the tone with the chevron focused");
+        Assert.Equal(decimals, view.Decimals);
     }
 
     [Fact]

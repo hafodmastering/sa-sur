@@ -107,6 +107,8 @@ SA-Sur shows the new frequency. If a tone is playing, SA-Sur retunes the tone at
 
 The button shows `Stop` while the tone plays.
 
+The Space bar works wherever the focus is in the window, so it still plays after you click a note.
+
 ### Set the level
 
 - Move the slider next to the Play button.

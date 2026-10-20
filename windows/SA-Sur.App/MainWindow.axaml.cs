@@ -4,6 +4,7 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
+using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 using Avalonia.Styling;
 using SaSur.Core;
@@ -27,18 +28,31 @@ public partial class MainWindow : Window
         this.FindControl<ContentControl>("Host")!.Content = _view;
         _view.HelpRequested += OnHelpRequested;
         _view.AppearanceChanged += (_, _) => ApplyTitleBarTheme();
+
+        // Space is the transport's shortcut wherever the focus is in this window. A Button claims
+        // Space and activates itself, so a bubbling-only handler let a click on a note leave Space
+        // re-triggering that note instead of reaching the transport. KeyDown is registered
+        // Tunnel | Bubble, and the tunnel pass reaches the window before the focused control, so
+        // handling it here pre-empts the button; e.Handled then keeps the bubble pass from
+        // toggling a second time.
+        AddHandler(KeyDownEvent, OnTransportKeyDown, RoutingStrategies.Tunnel);
     }
 
-    // Key events bubble to the window from the focused control; a tunnel handler is never invoked
-    // on this path, and e.Handled is what stops one press toggling the transport twice.
+    private void OnTransportKeyDown(object? sender, KeyEventArgs e)
+    {
+        if (e.Handled || e.Key != Key.Space)
+        {
+            return;
+        }
+
+        e.Handled = true;
+        _view.ToggleTransport();
+    }
+
+    // F1 is not claimed by any control the view builds, so it can be answered on the bubble pass.
     protected override void OnKeyDown(KeyEventArgs e)
     {
-        if (e.Key == Key.Space && !e.Handled)
-        {
-            _view.ToggleTransport();
-            e.Handled = true;
-        }
-        else if (e.Key == Key.F1 && !e.Handled)
+        if (e.Key == Key.F1 && !e.Handled)
         {
             _view.OpenHelpMenu();
             e.Handled = true;

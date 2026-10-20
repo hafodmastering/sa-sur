@@ -44,7 +44,7 @@ The controls and audio behaviour are the same on both platforms, including the m
 |---|---|
 | Click a note | Selects it, displays the frequency |
 | Click an octave | Retunes immediately, even while sounding |
-| Play / Stop, or **Space** | Starts and stops the tone |
+| Play / Stop, or **Space** | Starts and stops the tone. Space works wherever the focus is in the window, so it still plays after you have clicked a note |
 | Speaker slider | Output level |
 | 440 / 432 / 415 / 442 | Concert-A reference; the whole readout follows |
 | Copy icon | Copies the number to the clipboard, without the unit |
