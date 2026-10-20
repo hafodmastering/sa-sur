@@ -30,7 +30,7 @@
     <DisplayName>SA-Sur</DisplayName>
     <PublisherDisplayName>__PUBLISHER_DISPLAY_NAME__</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
-    <Description>A single-window note-to-frequency utility: click a note, read its frequency, and hear it as a sine tone. Free of charge under Apache-2.0.</Description>
+    <Description>A single-window note-to-frequency utility: click a note, read its frequency, and hear it as a sine tone. Free of charge; the source is Apache-2.0.</Description>
   </Properties>
 
   <Dependencies>
@@ -41,6 +41,11 @@
   <Resources>
     <Resource Language="en-GB" />
   </Resources>
+
+  <!-- The documents travel in the package root, beside the executable: the manual, the licence and
+       notices, and the EULA the Store copy is actually licensed under. The Help menu reads them
+       from here, so a package built without them has a dead Help item as well as a missing notice.
+       They are staged by pack-msix.ps1. -->
 
   <Applications>
     <!-- EntryPoint="Windows.FullTrustApplication" is what makes this a full-trust desktop app

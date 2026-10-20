@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-// Copyright 2026 Hafod Mastering Ltd and Sudeep Audio
+// Copyright 2026 Hafod Mastering Limited and Sudeep Audio.com LLP
 
 import AVFoundation
 import Combine
@@ -10,6 +10,11 @@ final class ToneGenerator: ObservableObject {
     static let headroom = 0.11
 
     @Published private(set) var isRunning = false
+
+    /// Set when the engine refuses to start, so the window can say why instead of leaving
+    /// the Play button inert. Cleared on the next start that succeeds.
+    @Published private(set) var failure: String?
+
     @Published var volume: Double = 0.5 {
         didSet { osc.targetGain = isRunning ? volume * Self.headroom : 0.0 }
     }
@@ -38,11 +43,28 @@ final class ToneGenerator: ObservableObject {
         if !engine.isRunning {
             do { try engine.start() } catch {
                 NSLog("SA-Sur: audio engine failed to start: \(error)")
+                // The Windows build has shown a reason in its window since 0.90.1; the macOS
+                // build only logged one, which reads as a dead button on a Mac with no output
+                // device. Same surface, same contract.
+                failure = Self.describe(error)
                 return
             }
         }
+        failure = nil
         osc.targetGain = volume * Self.headroom
         isRunning = true
+    }
+
+    func clearFailure() { failure = nil }
+
+    /// One sentence a user can act on. The technical error stays in the log.
+    ///
+    /// Deliberately not split into "no device" and "device refused": telling those apart means
+    /// matching CoreAudio error codes this project has never observed, and a wrong guess sends the
+    /// reader after the wrong fault. The one sentence is true in both cases.
+    private static func describe(_ error: Error) -> String {
+        "The audio output could not be started. Check that an output device is connected and "
+            + "selected in System Settings > Sound, then press Play again."
     }
 
     func stop() {

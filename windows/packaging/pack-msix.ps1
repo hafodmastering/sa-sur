@@ -23,9 +23,13 @@
 [CmdletBinding()]
 param(
     [string]$Version,
-    [string]$Identity = (Join-Path $PSScriptRoot 'store-identity.psd1'),
-    [string]$OutDir = (Join-Path $PSScriptRoot 'out'),
+    # Defaults are resolved in the body, not here: Windows PowerShell 5.1 evaluates a param()
+    # default outside the script scope, where $PSScriptRoot is empty, so `-File` invocation used to
+    # fail with "Cannot bind argument to parameter 'Path' because it is an empty string".
+    [string]$Identity,
+    [string]$OutDir,
     [string]$Configuration = 'Release',
+    [string]$Screenshots,
     [switch]$SelfSign,
     [switch]$Install,
     [string]$MakeAppx
@@ -33,6 +37,8 @@ param(
 
 $ErrorActionPreference = 'Stop'
 $packaging = $PSScriptRoot
+if (-not $Identity) { $Identity = Join-Path $packaging 'store-identity.psd1' }
+if (-not $OutDir) { $OutDir = Join-Path $packaging 'out' }
 $windowsDir = Split-Path $packaging -Parent
 $project = Join-Path $windowsDir 'SA-Sur.App\SaSur.App.csproj'
 
@@ -94,6 +100,53 @@ Copy-Item (Join-Path $publish '*') $stage -Recurse -Force
 # Debug symbols are not part of what a user installs, and the package is the thing they download.
 Get-ChildItem $stage -Filter *.pdb -Recurse -File | Remove-Item -Force
 Copy-Item (Join-Path $packaging 'Assets') (Join-Path $stage 'Assets') -Recurse -Force
+
+# The documents. A Store user never sees the GitHub release page, so the manual and the licences
+# have to be inside the package: the Help menu opens the manual and shows the licence texts, and
+# the same files satisfy Apache-2.0 section 4 for anyone who unpacks the MSIX.
+Write-Output "== documents =="
+$repo = Split-Path $windowsDir -Parent
+$manual = Join-Path $repo 'docs\SA-Sur-User-Manual.pdf'
+$manualSource = Join-Path $repo 'docs\MANUAL.md'
+if (-not (Test-Path $manual)) {
+    throw "no docs/SA-Sur-User-Manual.pdf - run tools/manual.sh (the manual is a shipped resource, and the Help menu is dead without it)"
+}
+$pdfTime = (Get-Item $manual).LastWriteTimeUtc
+$mdTime = (Get-Item $manualSource).LastWriteTimeUtc
+if ($pdfTime -lt $mdTime) {
+    throw ("docs/SA-Sur-User-Manual.pdf is older than docs/MANUAL.md ({0} vs {1}) - re-render it before packaging" -f $pdfTime, $mdTime)
+}
+Copy-Item $manual (Join-Path $stage 'SA-Sur-Manual.pdf') -Force
+
+$documents = @(
+    @{ Source = 'LICENSE';                    Target = 'LICENSE' },
+    @{ Source = 'NOTICE';                     Target = 'NOTICE' },
+    @{ Source = 'EULA.md';                    Target = 'EULA.txt' },
+    @{ Source = 'THIRD-PARTY-NOTICES.md';     Target = 'THIRD-PARTY-NOTICES.txt' },
+    @{ Source = 'windows\SA-Sur.Ui\Assets\Fonts\OFL.txt'; Target = 'OFL.txt' }
+)
+foreach ($doc in $documents) {
+    $from = Join-Path $repo $doc.Source
+    if (-not (Test-Path $from)) { throw ("missing document: {0}" -f $doc.Source) }
+    Copy-Item $from (Join-Path $stage $doc.Target) -Force
+}
+Write-Output ("  documents: SA-Sur-Manual.pdf ({0:N0} bytes), LICENSE, NOTICE, EULA.txt, THIRD-PARTY-NOTICES.txt, OFL.txt" -f (Get-Item $manual).Length)
+
+# A screenshot that predates the source is a claim about a build that does not exist. Checked
+# against the newest source file rather than a date typed in by hand.
+if ($Screenshots) {
+    Write-Output "== screenshots =="
+    $newestSource = Get-ChildItem (Join-Path $windowsDir '*') -Recurse -File -Include *.cs, *.axaml, *.csproj |
+        Sort-Object LastWriteTimeUtc -Descending | Select-Object -First 1
+    $shots = Get-ChildItem $Screenshots -Filter '*.png' -File -ErrorAction SilentlyContinue
+    if (-not $shots) { throw ("no screenshots in {0} - run tools/windows-store-screenshots.sh" -f $Screenshots) }
+    foreach ($shot in $shots) {
+        if ($shot.LastWriteTimeUtc -lt $newestSource.LastWriteTimeUtc) {
+            throw ("{0} is older than {1} - re-render the screenshots for this commit" -f $shot.Name, $newestSource.Name)
+        }
+        Write-Output ("  {0}  {1:N0} bytes" -f $shot.Name, $shot.Length)
+    }
+}
 $manifest = Get-Content (Join-Path $packaging 'AppxManifest.xml') -Raw
 $manifest = $manifest.Replace('__PACKAGE_NAME__', $id.PackageName).
     Replace('__PUBLISHER__', $id.Publisher).

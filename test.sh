@@ -1,6 +1,6 @@
 #!/bin/bash
 # SPDX-License-Identifier: Apache-2.0
-# Copyright 2026 Hafod Mastering Ltd and Sudeep Audio
+# Copyright 2026 Hafod Mastering Limited and Sudeep Audio.com LLP
 
 # Builds and runs the verification harness, then diffs the note table against an
 # independent calculation. No Xcode required: swiftc from Command Line Tools only.

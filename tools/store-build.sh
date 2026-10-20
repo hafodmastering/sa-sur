@@ -1,6 +1,6 @@
 #!/bin/bash
 # SPDX-License-Identifier: Apache-2.0
-# Copyright 2026 Hafod Mastering Ltd and Sudeep Audio
+# Copyright 2026 Hafod Mastering Limited and Sudeep Audio.com LLP
 
 # Builds the Mac App Store variant of SA-Sur: the same sources and the same
 # icon/mark pipeline as build.sh, but assembled sandboxed (SASur.entitlements),
@@ -42,11 +42,11 @@ MANIFEST="$ROOT/PrivacyInfo.xcprivacy"
 BUNDLE_ID="$(/usr/libexec/PlistBuddy -c "Print :CFBundleIdentifier" "$ROOT/Info.plist")"
 BUILD_NUMBER="$(/usr/libexec/PlistBuddy -c "Print :CFBundleVersion" "$ROOT/Info.plist")"
 
-# The two channels run on their own version lines: the tree carries the
-# direct-download number, and the store's is stamped here. CFBundleVersion (the
-# build counter) is shared, because it counts rounds project-wide. See
-# docs/RELEASE.md.
-VERSION="${STORE_VERSION:-1.1}"
+# One version on all three channels since 1.2.0: the store build takes its number
+# from Info.plist like the direct download does. STORE_VERSION still exists for a
+# one-off override. CFBundleVersion (the build counter) is shared, because it counts
+# rounds project-wide. See docs/RELEASE.md.
+VERSION="${STORE_VERSION:-$(/usr/libexec/PlistBuddy -c "Print :CFBundleShortVersionString" "$ROOT/Info.plist")}"
 
 MODE="store"
 if [ "${1:-}" = "--smoke" ]; then
@@ -63,7 +63,10 @@ STORE_APP_IDENTITY="${STORE_APP_IDENTITY:-Apple Distribution: Sudeep Audio.com L
 STORE_PKG_IDENTITY="${STORE_PKG_IDENTITY:-Mac Installer Distribution: Sudeep Audio.com LLP ($TEAM_ID)}"
 STORE_PKG_IDENTITIES=("$STORE_PKG_IDENTITY" "3rd Party Mac Developer Installer: Sudeep Audio.com LLP ($TEAM_ID)")
 PROFILE="${STORE_PROFILE:-$ROOT/build/embedded.provisionprofile}"
-PKG="$BUILD/SA-Sur-$VERSION-store.pkg"
+# The build number belongs in the filename. Without it, build/store/ held build 11
+# while the build in App Review was build 12, and the two were indistinguishable by
+# name - which is exactly the mistake this line prevents.
+PKG="$BUILD/SA-Sur-$VERSION-$BUILD_NUMBER-store.pkg"
 
 echo "==> SA-Sur $VERSION (build $BUILD_NUMBER), mode: $MODE"
 
@@ -168,6 +171,16 @@ if [ ! -f "$ROOT/docs/SA-Sur-User-Manual.pdf" ]; then
     exit 1
 fi
 cp "$ROOT/docs/SA-Sur-User-Manual.pdf" "$APP/Contents/Resources/SA-Sur-Manual.pdf"
+
+echo "==> licence and notices"
+# A store copy is licensed under the EULA, not Apache-2.0, so the EULA has to be in
+# the bundle; the Apache-2.0 licence and the third-party notices travel with it
+# because the source grant does not stop being owed just because a store signed it.
+cp "$ROOT/LICENSE" "$ROOT/NOTICE" "$APP/Contents/Resources/"
+cp "$ROOT/EULA.md" "$APP/Contents/Resources/EULA.txt"
+cp "$ROOT/THIRD-PARTY-NOTICES.md" "$APP/Contents/Resources/THIRD-PARTY-NOTICES.txt"
+cp "$ROOT/windows/SA-Sur.Ui/Assets/Fonts/OFL.txt" "$APP/Contents/Resources/OFL.txt"
+
 printf 'APPL????' > "$APP/Contents/PkgInfo"
 plutil -lint "$APP/Contents/Info.plist" "$APP/Contents/Resources/PrivacyInfo.xcprivacy"
 

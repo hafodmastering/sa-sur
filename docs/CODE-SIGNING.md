@@ -4,14 +4,14 @@ Where each channel's trust comes from, what the signature actually proves, and w
 
 ## macOS - signed and notarized
 
-`SA-Sur-1.0-MacOS.zip` is signed with an Apple **Developer ID Application** certificate issued to
+`SA-Sur-1.2.0-MacOS.zip` is signed with an Apple **Developer ID Application** certificate issued to
 **Sudeep Audio.com LLP** (team `E37W7LU474`), notarized by Apple, and the ticket is stapled. On a
 quarantined copy Gatekeeper reports `accepted, source=Notarized Developer ID`. The steps live in
 [docs/RELEASE.md](RELEASE.md); the identity and notarization credentials are held by Donal.
 
 ## Windows release download - unsigned, verified by hash
 
-`SA-Sur-1.0-windows.exe` is **not signed**. A downloaded copy carries Mark-of-the-Web, so SmartScreen
+`SA-Sur-1.2.0-windows.exe` is **not signed**. A downloaded copy carries Mark-of-the-Web, so SmartScreen
 shows *"Windows protected your PC"* with an **unknown publisher** until the user picks *More info →
 Run anyway*; machines under an application-whitelisting policy, and Windows 11 machines with Smart App
 Control on, may refuse to run it at all. An unsigned file also starts from zero reputation on every
@@ -29,15 +29,20 @@ Control and enterprise policies that refuse unsigned executables. That is the ch
 prompt rather than softening it, and it costs nothing: developer registration, certification and
 binary hosting are free, and there is no certificate to buy or renew.
 
-The package is an **MSIX**. Its manifest, tile assets and packaging scripts are kept with the store
-work rather than in this repository, so the listing and the package are prepared together and neither
-can drift from the other. The Store line carries its own version number - **1.1.1.0** - stamped into
-the package identity *and* into the binary, the same rule `tools/store-build.sh` applies to the macOS
-store build.
+The package is an **MSIX**, and since 1.2.0 its manifest, tile assets and packaging scripts live **in
+this repository** (`windows/packaging/`), so the Store build is reproducible from the public source
+and the listing cannot drift from the package. They contain no secrets: the identity values are the
+ones Partner Center displays, and the package is unsigned until Microsoft signs it.
 
-**State.** The package is built, verified and uploaded to Partner Center, and the store listing is
-complete. Submission 1 (`SA-Sur_1.1.1.0_x64.msix`) is **in certification**; publishing is manual,
-so nothing becomes public until *Publish now* is pressed after certification passes.
+The package carries the same version as every other channel - **1.2.0**, written in four parts
+(`1.2.0.0`) because the package schema requires four - stamped into the package identity *and* into
+the binary, the same rule `tools/store-build.sh` applies to the macOS store build. A stamped binary
+whose version disagrees with its manifest fails the packaging script.
+
+**State.** Submission 1 (`SA-Sur_1.1.1.0_x64.msix`) went through certification and the app was
+published on **20 October 2026** as 1.1. 1.2.0 is the current submission. Publishing is
+**manual**: a certified submission does not become public until *Publish now* is pressed, which is
+why the record names who pressed it and when.
 
 ## What was considered, and why this is the route
 

@@ -1,6 +1,6 @@
 #!/bin/bash
 # SPDX-License-Identifier: Apache-2.0
-# Copyright 2026 Hafod Mastering Ltd and Sudeep Audio
+# Copyright 2026 Hafod Mastering Limited and Sudeep Audio.com LLP
 
 # Signs SA-Sur with a Developer ID certificate, has Apple notarize it, and
 # staples the ticket to the app, so it opens on anyone's Mac without the

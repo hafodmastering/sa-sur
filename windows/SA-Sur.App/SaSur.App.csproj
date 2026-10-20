@@ -19,15 +19,26 @@
          a frequency calculator never calls. partial rather than full leaves Avalonia and this
          project's own assemblies byte-identical to an untrimmed build, so the shipped UI stack is
          exactly the one that was run and measured on Windows. -->
-    <Version>1.0</Version>
+    <!-- One product version across the three channels from 1.2.0: the GitHub download, the Mac App
+         Store build and this Store package all say 1.2.0. The MSIX pads it to four parts (1.2.0.0)
+         because that is what the package schema requires. Build numbers are internal and never
+         appear in prose. See docs/RELEASE.md. -->
+    <Version>1.2.0</Version>
+    <ApplicationIcon>SA-Sur.ico</ApplicationIcon>
     <PublishTrimmed>true</PublishTrimmed>
     <TrimMode>partial</TrimMode>
     <AssemblyTitle>SA-Sur : Note to Frequency</AssemblyTitle>
     <Product>SA-Sur</Product>
-    <Company>Hafod Mastering Ltd and Sudeep Audio</Company>
-    <Copyright>Copyright 2026 Hafod Mastering Ltd and Sudeep Audio</Copyright>
+    <Company>Hafod Mastering Limited and Sudeep Audio.com LLP</Company>
+    <Copyright>© 2026 Hafod Mastering Limited and Sudeep Audio.com LLP</Copyright>
     <NeutralLanguage>en</NeutralLanguage>
   </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Two jobs, two items: ApplicationIcon above brands the .exe, and this makes the same bytes
+         loadable as an Avalonia asset so Window.Icon can use it. -->
+    <AvaloniaResource Include="SA-Sur.ico" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Avalonia" Version="11.3.7" />

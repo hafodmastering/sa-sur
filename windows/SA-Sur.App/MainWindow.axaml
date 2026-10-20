@@ -1,10 +1,15 @@
 <!-- SPDX-License-Identifier: Apache-2.0 -->
-<!-- Copyright 2026 Hafod Mastering Ltd and Sudeep Audio -->
+<!-- Copyright 2026 Hafod Mastering Limited and Sudeep Audio.com LLP -->
 
+<!-- Icon is the *window* icon, which Avalonia sets through SetIcon at run time; <ApplicationIcon>
+     in the .csproj brands the executable file. They are two different things and the app needs
+     both: without this attribute the title bar and taskbar show the generic Windows icon the
+     Store screenshots caught. -->
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         x:Class="SaSur.App.MainWindow"
         Title="SA-Sur : Note to Frequency"
+        Icon="/SA-Sur.ico"
         Width="730"
         Height="237"
         CanResize="False"

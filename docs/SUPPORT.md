@@ -1,6 +1,6 @@
 # Support - SA-Sur
 
-SA-Sur - *know your note, know your frequency* - shows the frequency of any note in twelve-tone equal temperament and plays it as a sine tone. One window, for macOS 13 or later (Apple Silicon and Intel) and Windows 10 or later (64-bit).
+SA-Sur - *know your note, know your frequency* - shows the frequency of any note in twelve-tone equal temperament and plays it as a sine tone. One window, for macOS 13 or later (Apple Silicon and Intel) and Windows 10 version 1809 or later (64-bit).
 
 ## Using it
 
@@ -8,7 +8,8 @@ Everything is in one window: click a note and an octave, adjust the concert-A re
 
 ## If something is wrong
 
-- **Installed from the App Store:** reinstalling from the App Store fixes most install problems.
+- **Installed from the Mac App Store or the Microsoft Store:** reinstall from the store; that fixes most install problems, and the store handles updates.
+- **No sound, or a message that the audio will not start:** check the output device and its level, then press Play again. The manual (Help menu, or F1 on Windows) covers this in section 7.
 - **A build you made yourself:** if macOS blocks it, that is the ordinary Gatekeeper prompt for an unnotarized build. See the *Build* section of the README for the explanation and the one-line fix, or use System Settings → Privacy & Security → Open Anyway.
 - **Windows warns about an unknown publisher:** the release download is unsigned; choose *More info → Run anyway*. The Microsoft Store build is signed by Microsoft and shows no such warning. [docs/CODE-SIGNING.md](CODE-SIGNING.md) has the position.
 - **Anything else:** the app is small and finished. The source is open (Apache-2.0) - paste it into your favourite AI assistant and have whatever bothers you looked at, changed, or ported. That is genuinely the fastest route.
@@ -21,5 +22,7 @@ SA-Sur is released as-is. Neither company offers product support for it, reviews
 ## Links
 
 - Source and documentation: https://github.com/hafodmastering/sa-sur
+- User manual: https://github.com/hafodmastering/sa-sur/blob/main/docs/MANUAL.md
+- End user licence: https://github.com/hafodmastering/sa-sur/blob/main/EULA.md
 - Hafod Mastering: https://hafodmastering.co.uk
 - Sudeep Audio: https://sudeepaudio.com

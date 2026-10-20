@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <assembly manifestVersion="1.0" xmlns="urn:schemas-microsoft-com:asm.v1">
-  <assemblyIdentity version="1.0.0.0" name="SA-Sur.app" />
+  <assemblyIdentity version="1.2.0.0" name="SA-Sur.app" />
 
   <!-- PerMonitorV2: without it Windows scales the window on any display above 100%, and the
        730x237 geometry the layout is measured against stops being what the user sees. -->

@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-// Copyright 2026 Hafod Mastering Ltd and Sudeep Audio
+// Copyright 2026 Hafod Mastering Limited and Sudeep Audio.com LLP
 
 import AppKit
 import Foundation
@@ -72,6 +72,18 @@ if let executable = bundle.executableURL {
     check("executable", exists && !isDirectory.boolValue, executable.lastPathComponent)
 } else {
     check("executable", false, "CFBundleExecutable did not resolve")
+}
+
+// The Help menu's Licences item builds its window out of exactly these files, so a
+// bundle missing one is a bundle with a half-empty licence window. Apache-2.0
+// section 4 wants the licence and NOTICE shipped; the EULA is what a store copy is
+// licensed under.
+for name in ["EULA.txt", "LICENSE", "NOTICE", "THIRD-PARTY-NOTICES.txt", "OFL.txt"] {
+    let path = bundle.bundlePath + "/Contents/Resources/" + name
+    let attributes = try? FileManager.default.attributesOfItem(atPath: path)
+    let bytes = (attributes?[.size] as? Int) ?? 0
+    check("licence \(name)", FileManager.default.fileExists(atPath: path) && bytes > 200,
+          bytes > 0 ? "\(bytes) bytes" : "missing")
 }
 
 print(problems == 0 ? "BUNDLE CHECK: PASS" : "BUNDLE CHECK: FAIL (\(problems) problem(s))")

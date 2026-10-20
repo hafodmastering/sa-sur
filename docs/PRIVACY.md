@@ -1,10 +1,10 @@
 # Privacy policy - SA-Sur
 
-SA-Sur is released by **Hafod Mastering Ltd** and **Sudeep Audio.com LLP** together, for macOS and Windows. This page describes what the app does with your data.
+SA-Sur is released by **Hafod Mastering Limited** and **Sudeep Audio.com LLP** together, for macOS and Windows. This page describes what the app does with your data.
 
 The short version: **nothing leaves your machine.**
 
-*Applies to SA-Sur 1.0 and later. Last updated: 20 October 2026.*
+*Applies to SA-Sur 1.0 and later, on every channel: the GitHub download, the Mac App Store and the Microsoft Store. Last updated: 20 October 2026.*
 
 ## What the app collects
 
@@ -26,4 +26,4 @@ If this policy ever needs to change, the current version will always be at this 
 
 ## Questions
 
-Contact either company: [Hafod Mastering](https://hafodmastering.co.uk) · [Sudeep Audio](https://sudeepaudio.com).
+Contact either company: [Hafod Mastering](https://hafodmastering.co.uk) · [Sudeep Audio](https://sudeepaudio.com). The licence for a store copy is the [SA-Sur End User Licence Agreement](../EULA.md), which is a licence, not a privacy term.

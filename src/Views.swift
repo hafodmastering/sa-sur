@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-// Copyright 2026 Hafod Mastering Ltd and Sudeep Audio
+// Copyright 2026 Hafod Mastering Limited and Sudeep Audio.com LLP
 
 import AppKit
 import SwiftUI
@@ -165,6 +165,18 @@ struct ContentView: View {
             applyTheme()
         }
         .onDisappear { tone.shutdown() }
+        .alert("No sound", isPresented: failureShowing) {
+            Button("OK", role: .cancel) { tone.clearFailure() }
+        } message: {
+            Text(tone.failure ?? "")
+        }
+    }
+
+    private var failureShowing: Binding<Bool> {
+        Binding(
+            get: { tone.failure != nil },
+            set: { showing in if !showing { tone.clearFailure() } }
+        )
     }
 
     private var noteRow: some View {

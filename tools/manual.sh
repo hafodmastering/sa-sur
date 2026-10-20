@@ -1,6 +1,6 @@
 #!/bin/bash
 # SPDX-License-Identifier: Apache-2.0
-# Copyright 2026 Hafod Mastering Ltd and Sudeep Audio
+# Copyright 2026 Hafod Mastering Limited and Sudeep Audio.com LLP
 
 # The manual: one markdown source, one HTML render, one PDF.
 #

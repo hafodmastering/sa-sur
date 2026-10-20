@@ -8,29 +8,35 @@ SA-Sur shows the frequency of any note in twelve-tone equal temperament and play
 
 ![SA-Sur, dark appearance](docs/screenshots/ui-snapshot-dark.png)
 
-**Version 1.0** for the direct download. Free, Apache-2.0, released by **Hafod Mastering** and **Sudeep Audio**.
+**Version 1.2.0.** Free, Apache-2.0 for the source, released by **Hafod Mastering** and **Sudeep Audio**.
 
 ## Release channels
 
 | Channel | Version | State |
 |---|---|---|
-| GitHub release (direct download) | 1.0 | Live since 7 October 2026 |
-| Mac App Store | 1.1 | Live since 19 October 2026 |
-| Microsoft Store | 1.1.1.0 | Submitted, in certification |
+| GitHub release (direct download) | 1.2.0 | Published 20 October 2026 |
+| Mac App Store | 1.2.0 | Live; 1.1 was live from 19 October 2026 |
+| Microsoft Store | 1.2.0 | Live; 1.1 was live from 20 October 2026 |
 
-The source is the same in all three. The Mac App Store build is sandboxed and is distributed under Apple's Standard EULA; the Microsoft Store build is distributed under Microsoft's Standard Application License Terms. The GitHub download is Apache-2.0. See [Licence and marks](#licence-and-marks).
+The source is the same in all three. The Mac App Store build is sandboxed; both store builds are licensed under the [SA-Sur End User Licence Agreement](EULA.md), which incorporates Apache-2.0 for the source. The GitHub download is Apache-2.0 alone. See [Licence and marks](#licence-and-marks).
+
+### Version numbers
+
+**One version, three channels.** Since 1.2.0 the direct download and both stores carry the same number, so "SA-Sur 1.2.0" means one thing wherever it is written. The Windows package writes it in four parts (`1.2.0.0`) because the package format requires four; that is the same number, not a different release.
+
+Build counters are internal and never appear in prose: the macOS bundle's `CFBundleVersion` counts release rounds project-wide, and the Store package's fourth field stays `0`. A release that only changes metadata is a **patch** (1.2.1); a release that changes behaviour is a **minor** (1.3.0). Tags are `v1.2.0`.
 
 ## Install
 
-**macOS 13.0 or later**, Apple Silicon and Intel. Download `SA-Sur-1.0-MacOS.zip` from [Releases](../../releases), unzip it, drag `SA-Sur.app` to `/Applications`, and open it. The download is signed with a Developer ID and notarized by Apple, so macOS opens it with the ordinary "downloaded from the internet" confirmation and nothing else. The user manual opens from the **Help** menu.
+**macOS 13.0 or later**, Apple Silicon and Intel. Download `SA-Sur-1.2.0-MacOS.zip` from [Releases](../../releases), unzip it, drag `SA-Sur.app` to `/Applications`, and open it. The download is signed with a Developer ID and notarized by Apple, so macOS opens it with the ordinary "downloaded from the internet" confirmation and nothing else. The user manual opens from the **Help** menu.
 
-**Windows 10 or later, 64-bit.** Download `SA-Sur-1.0-windows.exe` from [Releases](../../releases) and run it: it is self-contained, so there is nothing to install and no .NET runtime to add. The manual for that build is attached to the same release as `SA-Sur-User-Manual.pdf`, because the Windows app has no Help menu.
+**Windows 10 version 1809 or later, 64-bit.** Download `SA-Sur-1.2.0-windows.exe` from [Releases](../../releases) and run it: it is self-contained, so there is nothing to install and no .NET runtime to add. The manual opens from the **Help** menu (or press **F1**) in the Windows app as well, and the same PDF is attached to the release.
 
-The Windows build is **not signed**, so SmartScreen shows *"Windows protected your PC"* with an unknown publisher - choose *More info → Run anyway*. The **Microsoft Store** is the route that removes that prompt rather than softening it, because Microsoft re-signs whatever it publishes; that listing is in certification. [docs/CODE-SIGNING.md](docs/CODE-SIGNING.md) records what each signature does and does not prove.
+The direct Windows download is **not signed**, so SmartScreen shows *"Windows protected your PC"* with an unknown publisher - choose *More info → Run anyway*. The **Microsoft Store** is the route that removes that prompt rather than softening it, because Microsoft re-signs whatever it publishes; [docs/CODE-SIGNING.md](docs/CODE-SIGNING.md) records what each signature does and does not prove.
 
-The controls and audio behaviour match the macOS app; the Windows build has no Help menu, so the manual is the PDF attached to the release. Audio goes to the default Windows output device.
+The controls and audio behaviour are the same on both platforms, including the manual, the licences and the appearance setting. Audio goes to the default output device.
 
-**Mac App Store.** SA-Sur **1.1** is live there - a separate, sandboxed artifact. See [docs/APPSTORE.md](docs/APPSTORE.md).
+**Stores.** SA-Sur **1.2.0** is on the Mac App Store and on the Microsoft Store, as separate, store-signed artifacts from the same source. See [docs/APPSTORE.md](docs/APPSTORE.md) and [docs/CODE-SIGNING.md](docs/CODE-SIGNING.md).
 
 ## Use
 
@@ -44,7 +50,7 @@ The controls and audio behaviour match the macOS app; the Windows build has no H
 | Copy icon | Copies the number to the clipboard, without the unit |
 | Decimals stepper | 0–6 decimal places |
 | Display icon | Toggles between light mode, dark mode and system mode |
-| Help → SA-Sur User Manual (macOS) | Opens the manual |
+| Help → SA-Sur User Manual, or **F1** | Opens the manual; the same menu holds the licences and the version |
 
 The app opens at **A4, octave 4, 440 Hz → 440.00 Hz**, two decimal places. Notes run `C C# D Eb E F F# G G# A Bb B`; octaves run 0–8 (C0 = 16.35 Hz, B8 = 7902.13 Hz).
 
@@ -65,8 +71,10 @@ The tone is a phase-continuous sine with a 12 ms gain envelope, so starting, sto
 ```sh
 cd windows
 dotnet build SA-Sur.slnx -c Release
-dotnet test  SA-Sur.slnx -c Release   # 80 tests
+dotnet test  SA-Sur.slnx -c Release   # Core, Audio, Ui and App suites
 ```
+
+The Store package is not built by CI: it needs the Partner Center identity, and it is packaged by `windows/packaging/pack-msix.ps1` from the same commit. See [windows/packaging/README.md](windows/packaging/README.md).
 
 A macOS build from source is **not notarized**, so Gatekeeper will block it - it carries no Developer ID and no notarization ticket. To open your own build:
 
@@ -89,18 +97,21 @@ tools/                     mark and icon composition, snapshot measurement, tabl
 tools/manual.sh            the manual: markdown to HTML, and a check of the PDF
 docs/MANUAL.md             the user manual - Help menu, release PDF
 docs/DESIGN.md             why the app is the shape it is
-docs/RELEASE.md            signing, notarizing and publishing a release
+docs/RELEASE.md            versions, signing, notarizing and publishing a release
 windows/                   the same app in C# + Avalonia (Core, Audio, Ui, App)
-.github/workflows/windows.yml   builds, tests and packages the Windows app
+windows/packaging/         the Microsoft Store package: manifest, identity, pack-msix.ps1
+.github/workflows/windows.yml   builds, tests and publishes the Windows .exe
 ```
 
 `src/SineOscillator.swift` avoids AVFoundation deliberately, so the DSP can be rendered into a buffer and measured instead of only heard. The app was written with AI assistance and checked the hard way: offscreen renders, measurements read back from the shipped artifact, and Gatekeeper tested on a quarantined copy.
 
 ## Licence and marks
 
-**Apache License 2.0** - see [LICENSE](LICENSE), [NOTICE](NOTICE) and [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md). Copyright © 2026 Hafod Mastering Ltd and Sudeep Audio.com LLP. Use it, modify it, redistribute it, sell it, including inside closed-source products; keep the notices, and state significant changes. It is published free of charge: there is no paid edition or support contract.
+**Apache License 2.0** for the source - see [LICENSE](LICENSE) and [NOTICE](NOTICE). Copyright © 2026 Hafod Mastering Limited and Sudeep Audio.com LLP. Use it, modify it, redistribute it, sell it, including inside closed-source products; keep the notices, and state significant changes. It is published free of charge: there is no paid edition or support contract.
 
-**Store builds.** The source and the GitHub download are Apache-2.0. A build downloaded from the Mac App Store is distributed under Apple's Standard EULA; a build downloaded from the Microsoft Store is distributed under Microsoft's Standard Application License Terms. The same source is available here under Apache-2.0.
+**Store builds** are licensed under the [SA-Sur End User Licence Agreement](EULA.md), which grants you the store copy and expressly incorporates Apache-2.0 for the source: your rights in the source are never narrower than Apache-2.0, whichever channel you downloaded from, and where the two differ as to the source, Apache-2.0 prevails.
+
+**Third-party components** are listed in [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md), with their copyright lines and licence texts. Every build ships that file, `LICENSE`, `NOTICE` and the EULA; the macOS app carries them in `Contents/Resources` and the Windows package beside the executable, and the app's Help menu shows them.
 
 The names, logos and marks of Hafod Mastering and Sudeep Audio, and the **SA-Sur** name and app artwork, are not licensed with the code (Apache-2.0 §6). Forks are welcome; forks presented as coming from, co-branded with, or endorsed by either company are not. If you ship a modified build, replace those marks or remove them.
 
@@ -121,7 +132,7 @@ The names, logos and marks of Hafod Mastering and Sudeep Audio, and the **SA-Sur
 
 SA-Sur does one job in our studio. You're welcome to change it to suit yours. We don't offer support, review pull requests or collect feature requests; a tool like this is worth having because it is shaped to one studio's way of working.
 
-That is the whole reason the source is here. `src/` is about 610 lines of Swift and the frequency maths is one line of it, so make it yours. Paste the source into whichever AI assistant you already use and ask:
+That is the whole reason the source is here. `src/` is about 620 lines of Swift and the frequency maths is one line of it, so make it yours. Paste the source into whichever AI assistant you already use and ask:
 
 - *"Add a cents-deviation readout against A=440 to `src/NoteMath.swift`, and extend `tests/main.swift` to cover it."*
 - *"Rewrite `src/Views.swift` with my studio's colours, and drop the two bundled marks."*
@@ -133,8 +144,8 @@ Fork it, change it, name it, put your own marks on it.
 ## The collaboration
 
 **Hafod Mastering** is a professional mastering studio in Wales.
-**Sudeep Audio** is a pro audio hardware and software supplier in India.
+**Sudeep Audio** is a pro audio hardware and software distributor in India.
 
-SA-Sur is the first app in a series we are releasing together, all free of charge. Hafod Mastering built the app; Sudeep Audio contributed the name and the logo, and signs and notarizes the macOS build under its Apple Developer team. *SA* is the first note of the Indian scale, and also the acronym for Sudeep Audio. *sur* is note, or pitch.
+SA-Sur is the first app in a series we are releasing together, all free of charge. Hafod Mastering built the app; Sudeep Audio contributed the name and the logo, signs and notarizes the macOS build under its Apple Developer team, and publishes the Microsoft Store build. *SA* is the first note of the Indian scale, and also the acronym for Sudeep Audio. *sur* is note, or pitch.
 
 It grew out of Donal Whelan and Gethin John's PALM Expo presentation in Mumbai on using AI in the studio, and Aditya Mehta's response to it - why not release these tools? So here we are.

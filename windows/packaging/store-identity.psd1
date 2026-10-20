@@ -7,8 +7,10 @@
 #   Publisher            Partner Center -> Product identity -> Package/Identity/Publisher
 #                        Generated at reservation: CN=<guid> for this account, not the company name.
 #   PublisherDisplayName Partner Center -> Product identity -> Publisher display name
-#   Version              ours, and the Store line's own number: four parts, the last always 0
-#                        (Partner Center reserves the revision field), increasing every submission.
+#   Version              ours: the product version in four parts, the last always 0 (Partner
+#                        Center reserves the revision field), increasing every submission. Since
+#                        1.2.0 this is the same number as every other channel - 1.2.0 written where
+#                        four parts are required. See docs/RELEASE.md.
 #
 # The Publisher value is also the subject of any certificate that signs the package for local
 # testing. For a Store submission the signature is a formality - the Store re-signs - but the
@@ -18,5 +20,5 @@
     PackageName          = 'SudeepAudio.SA-Sur'
     Publisher            = 'CN=5A16320F-B976-49A4-9FDF-FEA82A152D92'
     PublisherDisplayName = 'Sudeep Audio'
-    Version              = '1.1.1.0'
+    Version              = '1.2.0.0'
 }

@@ -2,7 +2,7 @@
 
 ## User manual
 
-Applies to SA-Sur 1.0 and later. Issue 1, 13 October 2026.
+Applies to SA-Sur 1.2.0 and later. Issue 2, 20 October 2026.
 
 ---
 
@@ -12,7 +12,7 @@ SA-Sur is a single-window app that shows the frequency of a note and plays it as
 
 It covers every note of a twelve-tone equal temperament scale, from C0 to B8.
 
-SA-Sur is free of charge. **Hafod Mastering Ltd** and **Sudeep Audio.com LLP** publish it together, for macOS and Windows.
+SA-Sur is free of charge. **Hafod Mastering Limited** and **Sudeep Audio.com LLP** publish it together, for macOS and Windows.
 
 About the name: *SA* is the first note of the Indian scale, and also the abbreviation of Sudeep Audio. *Sur* is note, or pitch.
 
@@ -22,7 +22,7 @@ About the name: *SA* is the first note of the Indian scale, and also the abbrevi
 
 Requirements: macOS 13.0 or later, Apple Silicon or Intel.
 
-1. Download `SA-Sur-1.0-MacOS.zip` from the Releases page.
+1. Download `SA-Sur-1.2.0-MacOS.zip` from the Releases page.
 2. Double-click the zip file. macOS unpacks the folder.
 3. Move `SA-Sur.app` to the Applications folder.
 4. Open SA-Sur.
@@ -35,13 +35,13 @@ The app is signed and notarized by Apple. macOS shows the usual confirmation for
 2. Search for `SA-Sur`.
 3. Click *Get*, then click *Install*.
 
-The App Store copy is the same app, sandboxed for the store. Its version number is its own number, because App Review releases it on its own schedule.
+The App Store copy is the same app and the same version, sandboxed for the store. The App Store updates it for you.
 
 ### Windows - the download version
 
-Requirements: Windows 10 or later, 64-bit.
+Requirements: Windows 10 version 1809 or later, 64-bit.
 
-1. Download `SA-Sur-1.0-windows.exe` from the Releases page.
+1. Download `SA-Sur-1.2.0-windows.exe` from the Releases page.
 2. Run the file.
 
 There is no installer, and no .NET runtime to add.
@@ -57,7 +57,7 @@ The release download is unsigned. Windows therefore shows *"Windows protected yo
 2. Search for `SA-Sur`.
 3. Click *Get*, then click *Install*.
 
-The Store copy is signed by Microsoft, so it shows no unknown-publisher warning.
+The Store copy is the same app and the same version. It is signed by Microsoft, so it shows no unknown-publisher warning, and the Store updates it for you.
 
 ## 3. The window
 
@@ -79,6 +79,8 @@ All the controls are in one window. The window keeps its size.
 | 10 | Appearance | bottom right, last icon | Selects the System, Light or Dark appearance |
 
 SA-Sur opens in the state A4, octave 4, 440 Hz and 2 decimal places. The readout is therefore 440.00 Hz.
+
+The macOS app also has a **Help** menu in the menu bar. The Windows app has no menu bar, so it carries the same items behind a small Help icon at the right edge of the bottom row. Section 4 describes both.
 
 SA-Sur quits when you close the window.
 
@@ -137,7 +139,14 @@ SA-Sur puts the number on the clipboard, without the unit Hz. The icon shows a c
 1. Click the appearance icon at the bottom right.
 2. Click it again to see the next appearance.
 
-The icon goes through System, Light and Dark. SA-Sur keeps your choice for the next time that you open the app.
+The icon goes through System, Light and Dark. SA-Sur keeps your choice for the next time that you open the app. On Windows the title bar follows the choice as well.
+
+### Open the manual, the licences or the version
+
+1. Click the Help icon at the bottom right, or press **F1**.
+2. Choose *User Manual*, *Licences and notices*, or *About SA-Sur*.
+
+On macOS the same items are in the **Help** menu. The manual opens as a PDF. The licences window shows the SA-Sur licence, the Apache-2.0 text, the notices for the third-party components, and the font licence.
 
 ## 5. Frequency values
 
@@ -174,7 +183,7 @@ SA-Sur sends the tone to the default output device of the computer. To use a dif
 - **macOS:** System Settings > Sound.
 - **Windows:** Settings > System > Sound.
 
-SA-Sur uses the new default device. If the tone stops when you change the device, press Play again.
+SA-Sur follows the new default device and continues to play. If the device disappears while the tone is playing, press Play again when another device is available.
 
 SA-Sur keeps the audio engine ready after the first time that you play the tone. The next start is therefore immediate. SA-Sur releases the audio device when you close the window.
 
@@ -185,6 +194,12 @@ SA-Sur keeps the audio engine ready after the first time that you play the tone.
 1. Increase the level with the slider.
 2. Make sure that the computer uses the correct output device, and that its volume is not zero.
 3. Press the Space bar to stop the tone. Press it again to start the tone.
+
+### SA-Sur says that it cannot start the audio
+
+On macOS, SA-Sur shows a message when the audio engine refuses to start: for example when there is no output device at all. Connect an output device, or choose one in System Settings > Sound, then press Play again.
+
+On Windows, the reason appears in red beside the readout, for example *No audio output device*.
 
 ### macOS will not open a build that you made yourself
 
@@ -228,7 +243,11 @@ The full policy is in `docs/PRIVACY.md` in the repository.
 
 ## 9. Licence and marks
 
-SA-Sur is released under the **Apache License 2.0**. You can use it, change it and redistribute it, also inside a product whose source is closed. Keep the licence notices, and state the significant changes that you make.
+The **source code** of SA-Sur is released under the **Apache License 2.0**. You can use it, change it and redistribute it, also inside a product whose source is closed. Keep the licence notices, and state the significant changes that you make.
+
+A copy bought from the App Store or the Microsoft Store is licensed under the **SA-Sur End User Licence Agreement**. That agreement grants you the store copy, and it also carries the Apache-2.0 grant for the source: your rights in the source are never narrower than Apache-2.0, whichever copy you installed.
+
+The Windows build includes third-party components under the MIT licence and the Nunito typeface under the SIL Open Font License. Their notices are in `THIRD-PARTY-NOTICES.md` and in the *Licences* item of the Help menu.
 
 There is no paid edition and no support contract.
 
@@ -237,6 +256,7 @@ The names, the logos and the marks of Hafod Mastering and Sudeep Audio, and the 
 ## 10. Help and links
 
 - Source code and documentation: https://github.com/hafodmastering/sa-sur
+- End user licence: https://github.com/hafodmastering/sa-sur/blob/main/EULA.md
 - Privacy policy: https://github.com/hafodmastering/sa-sur/blob/main/docs/PRIVACY.md
 - Hafod Mastering: https://hafodmastering.co.uk
 - Sudeep Audio: https://sudeepaudio.com
@@ -257,4 +277,4 @@ Values are given to four decimal places. For another concert-A reference, multip
 
 ---
 
-SA-Sur : Note to Frequency - User manual, issue 1, 13 October 2026.
+SA-Sur : Note to Frequency - User manual, issue 2, 20 October 2026.

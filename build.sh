@@ -1,6 +1,6 @@
 #!/bin/bash
 # SPDX-License-Identifier: Apache-2.0
-# Copyright 2026 Hafod Mastering Ltd and Sudeep Audio
+# Copyright 2026 Hafod Mastering Limited and Sudeep Audio.com LLP
 
 # Builds SA-Sur.app as a universal binary (arm64 + x86_64), assembles the
 # bundle by hand, generates the icon, ad-hoc signs it and zips it for transfer.
@@ -11,7 +11,7 @@ ROOT="$(cd "$(dirname "$0")" && pwd)"
 SDK="$(xcrun --show-sdk-path)"
 BUILD="$ROOT/build"
 APP="$BUILD/SA-Sur.app"
-VERSION="1.0"
+VERSION="$(/usr/libexec/PlistBuddy -c "Print :CFBundleShortVersionString" "$ROOT/Info.plist")"
 MIN_MACOS="13.0"
 ARCHS="arm64 x86_64"
 SOURCES=("$ROOT/src/NoteMath.swift" "$ROOT/src/SineOscillator.swift" "$ROOT/src/ToneGenerator.swift" "$ROOT/src/Views.swift" "$ROOT/src/App.swift")
@@ -75,6 +75,16 @@ if [ ! -f "$ROOT/docs/SA-Sur-User-Manual.pdf" ]; then
     exit 1
 fi
 cp "$ROOT/docs/SA-Sur-User-Manual.pdf" "$APP/Contents/Resources/SA-Sur-Manual.pdf"
+
+echo "==> licence and notices"
+# Apache-2.0 section 4 wants the licence and the NOTICE to travel with the binary, and the EULA is
+# what a store copy is actually licensed under. The Help menu reads these from Resources, so a
+# missing one is a broken menu item, not just a missing file.
+cp "$ROOT/LICENSE" "$ROOT/NOTICE" "$APP/Contents/Resources/"
+cp "$ROOT/EULA.md" "$APP/Contents/Resources/EULA.txt"
+cp "$ROOT/THIRD-PARTY-NOTICES.md" "$APP/Contents/Resources/THIRD-PARTY-NOTICES.txt"
+cp "$ROOT/windows/SA-Sur.Ui/Assets/Fonts/OFL.txt" "$APP/Contents/Resources/OFL.txt" 2>/dev/null || true
+
 printf 'APPL????' > "$APP/Contents/PkgInfo"
 plutil -lint "$APP/Contents/Info.plist"
 

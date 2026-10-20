@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-// Copyright 2026 Hafod Mastering Ltd and Sudeep Audio
+// Copyright 2026 Hafod Mastering Limited and Sudeep Audio.com LLP
 
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -70,11 +70,22 @@ public sealed class AppSettings
                 System.IO.Directory.CreateDirectory(directory);
             }
             File.WriteAllText(FilePath, JsonSerializer.Serialize(this, AppSettingsJson.Default.AppSettings));
+            LastSaveFailed = false;
         }
-        catch
+        catch (Exception ex)
         {
+            // A read-only %APPDATA% is not worth interrupting the user for, but a preference that
+            // silently stops persisting is indistinguishable from a broken control - so it is
+            // recorded, and a test can see it.
+            LastSaveFailed = true;
+            System.Diagnostics.Debug.WriteLine($"SA-Sur: could not save {FilePath} ({ex.Message}).");
         }
     }
+
+    /// True when the last Save() could not write. The appearance still applies for this session;
+    /// it just will not be remembered.
+    [JsonIgnore]
+    public bool LastSaveFailed { get; private set; }
 }
 
 public static class ThemeModeExtensions

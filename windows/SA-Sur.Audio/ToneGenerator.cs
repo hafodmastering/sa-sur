@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-// Copyright 2026 Hafod Mastering Ltd and Sudeep Audio
+// Copyright 2026 Hafod Mastering Limited and Sudeep Audio.com LLP
 
 using System.Diagnostics;
 using NAudio.CoreAudioApi;
@@ -184,9 +184,10 @@ public sealed class ToneGenerator : IToneOutput, IDisposable
 
         foreach (var (routed, raw, what) in attempts)
         {
+            WasapiPlayer? player = null;
             try
             {
-                var player = routed
+                player = routed
                     ? await Configure(routed: true, raw).BuildAsync().ConfigureAwait(false)
                     : Configure(routed: false, raw).Build();
                 player.Init(source);
@@ -194,6 +195,10 @@ public sealed class ToneGenerator : IToneOutput, IDisposable
             }
             catch (Exception ex) when (!IsConfigurationRefusal(ex))
             {
+                // A builder that succeeded and then refused Init has already claimed a client:
+                // dropping the reference without disposing it leaves one behind for the process
+                // lifetime, and this ladder tries up to four times.
+                DisposePlayer(player);
                 refusal = ex;
                 Debug.WriteLine($"SA-Sur: {what} unavailable ({ex.Message}).");
             }

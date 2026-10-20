@@ -1,5 +1,5 @@
 <!-- SPDX-License-Identifier: Apache-2.0 -->
-<!-- Copyright 2026 Hafod Mastering Ltd and Sudeep Audio -->
+<!-- Copyright 2026 Hafod Mastering Limited and Sudeep Audio.com LLP -->
 
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -261,7 +261,7 @@
     <Border Height="1"
             Background="{DynamicResource Divider}" />
 
-    <Grid ColumnDefinitions="Auto,Auto,*,Auto,Auto,Auto,Auto" VerticalAlignment="Center">
+    <Grid ColumnDefinitions="Auto,Auto,*,Auto,Auto,Auto,Auto,Auto" VerticalAlignment="Center">
 
       <Button x:Name="TransportButton" Grid.Column="0" Classes="push"
               Width="82" Height="24" VerticalAlignment="Center">
@@ -300,6 +300,13 @@
                   Margin="14,0,0,0" VerticalAlignment="Center" />
 
       <Button x:Name="AppearanceButton" Grid.Column="6" Classes="bare"
+              Width="24" Height="24" Margin="10,0,0,0" VerticalAlignment="Center" />
+
+      <!-- Help. The Windows app had no menu of any kind, so a Microsoft Store user - who never
+           sees the GitHub release page - had no route to the manual at all. This is the smallest
+           control that carries one, and it sits after the appearance toggle so the rest of the
+           footer is untouched; the row has ~100 px of slack (the note row sets the window width). -->
+      <Button x:Name="HelpButton" Grid.Column="7" Classes="bare"
               Width="24" Height="24" Margin="10,0,0,0" VerticalAlignment="Center" />
     </Grid>
 

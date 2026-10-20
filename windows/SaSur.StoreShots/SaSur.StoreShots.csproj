@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <!-- net10.0, not -windows: the screenshots are a picture of the shared view, and rendering it
+         here means they can be regenerated on the Mac from the same commit the package was built
+         from, without a Windows desktop session to take a screenshot in. -->
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Avalonia" Version="11.3.7" />
+    <PackageReference Include="Avalonia.Themes.Fluent" Version="11.3.7" />
+    <PackageReference Include="Avalonia.Headless" Version="11.3.7" />
+    <PackageReference Include="Avalonia.Skia" Version="11.3.7" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SA-Sur.Ui\SaSur.Ui.csproj" />
+  </ItemGroup>
+
+</Project>

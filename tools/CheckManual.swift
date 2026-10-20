@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-// Copyright 2026 Hafod Mastering Ltd and Sudeep Audio
+// Copyright 2026 Hafod Mastering Limited and Sudeep Audio.com LLP
 
 // Reads the manual PDF back and checks it, the same way CheckBundle checks the
 // app: the artifact is what ships, so the artifact is what gets read.
@@ -20,7 +20,10 @@ guard args.count >= 2 else {
     exit(2)
 }
 let path = args[1]
-let expectedPages = args.count > 2 ? (Int(args[2]) ?? 7) : 7
+// 8 pages from issue 2 (1.2.0): the Microsoft Store sections, the Help procedure and
+// the licence section took it from 7. The number is asserted, not descriptive - a page
+// that silently appears or disappears is a layout change nobody chose.
+let expectedPages = args.count > 2 ? (Int(args[2]) ?? 8) : 8
 
 var problems = 0
 
@@ -65,7 +68,7 @@ func pageIndex(_ needle: String) -> Int? {
 // Sections a reader navigates by, and the page they land on.
 for (needle, expected) in [("About SA-Sur", 1), ("Install SA-Sur", 1),
                           ("The window", 2), ("Procedures", 3),
-                          ("Privacy", 5), ("Appendix A", 7)] {
+                          ("Privacy", 5), ("Appendix A", 8)] {
     let found = pageIndex(needle)
     check("section \"\(needle)\"", found == expected - 1,
           found.map { "page \($0 + 1)" } ?? "not found")

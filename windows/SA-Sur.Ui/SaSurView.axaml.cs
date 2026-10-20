@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-// Copyright 2026 Hafod Mastering Ltd and Sudeep Audio
+// Copyright 2026 Hafod Mastering Limited and Sudeep Audio.com LLP
 
 using System.Diagnostics;
 using Avalonia;
@@ -17,6 +17,15 @@ using SaSur.Core;
 using ShapePath = Avalonia.Controls.Shapes.Path;
 
 namespace SaSur.Ui;
+
+/// What the Help menu can ask for. The view raises these; the platform project answers them,
+/// because opening a PDF and owning a window are shell concerns, not layout ones.
+public enum HelpTopic
+{
+    Manual,
+    Licences,
+    About,
+}
 
 public partial class SaSurView : UserControl
 {
@@ -57,6 +66,14 @@ public partial class SaSurView : UserControl
     private Button? _copyButton;
     private TextBlock? _decimalsText;
     private TextBlock? _problemText;
+    private Button? _helpButton;
+    private MenuFlyout? _helpFlyout;
+
+    public event EventHandler<HelpTopic>? HelpRequested;
+
+    /// Raised after the appearance control has been used, so the platform window can restyle its
+    /// non-client area: Avalonia themes the content, DWM owns the title bar.
+    public event EventHandler? AppearanceChanged;
 
     public SaSurView()
         : this(new SilentToneOutput(), AppSettings.Load())
@@ -139,6 +156,40 @@ public partial class SaSurView : UserControl
         _settings.Save();
         ApplyTheme();
         RefreshAll();
+        AppearanceChanged?.Invoke(this, EventArgs.Empty);
+    }
+
+    /// The Help button's click and F1 both land here, so there is one menu and one route to it.
+    public void OpenHelpMenu()
+    {
+        if (_helpButton is null)
+        {
+            return;
+        }
+
+        _helpFlyout ??= BuildHelpFlyout();
+        _helpFlyout.ShowAt(_helpButton);
+    }
+
+    /// The menu itself, so a test can drive its items. A Flyout only exists while it is open, so
+    /// there is no other way to check that each item asks for the right thing.
+    public MenuFlyout? HelpMenu => _helpFlyout;
+
+    private MenuFlyout BuildHelpFlyout()
+    {
+        var flyout = new MenuFlyout();
+        flyout.Items.Add(HelpItem("User Manual", HelpTopic.Manual));
+        flyout.Items.Add(HelpItem("Licences and notices", HelpTopic.Licences));
+        flyout.Items.Add(new Separator());
+        flyout.Items.Add(HelpItem("About SA-Sur", HelpTopic.About));
+        return flyout;
+    }
+
+    private MenuItem HelpItem(string header, HelpTopic topic)
+    {
+        var item = new MenuItem { Header = header };
+        item.Click += (_, _) => HelpRequested?.Invoke(this, topic);
+        return item;
     }
 
     public async Task<string> CopyFrequencyAsync()
@@ -252,7 +303,7 @@ public partial class SaSurView : UserControl
         _copyButton.Click += async (_, _) => await CopyFrequencyAsync();
         row.Children.Add(_copyButton);
 
-        _problemText = new TextBlock { IsVisible = false };
+        _problemText = new TextBlock { IsVisible = false, TextWrapping = TextWrapping.Wrap, MaxWidth = 420 };
         _problemText.Classes.Add("problem");
         row.Children.Add(_problemText);
     }
@@ -354,6 +405,19 @@ public partial class SaSurView : UserControl
 
         var appearance = this.FindControl<Button>("AppearanceButton")!;
         appearance.Click += (_, _) => CycleAppearance();
+
+        _helpButton = this.FindControl<Button>("HelpButton")!;
+        _helpButton.Content = new TextBlock
+        {
+            Text = "?",
+            FontSize = 13,
+            FontWeight = FontWeight.SemiBold,
+            HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Center,
+            VerticalAlignment = Avalonia.Layout.VerticalAlignment.Center,
+        };
+        _helpFlyout = BuildHelpFlyout();
+        _helpButton.Click += (_, _) => OpenHelpMenu();
+        ToolTip.SetTip(_helpButton, "Help: user manual, licences, about (F1)");
     }
 
     private static Border DecimalsStepper(Action up, Action down)

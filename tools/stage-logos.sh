@@ -1,6 +1,6 @@
 #!/bin/bash
 # SPDX-License-Identifier: Apache-2.0
-# Copyright 2026 Hafod Mastering Ltd and Sudeep Audio
+# Copyright 2026 Hafod Mastering Limited and Sudeep Audio.com LLP
 
 # Stages the in-window marks under clean resource names (sudeep-audio.png /
 # hafod-mastering.png). Both are the companies' own supplied artwork: MakeMark

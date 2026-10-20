@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-// Copyright 2026 Hafod Mastering Ltd and Sudeep Audio
+// Copyright 2026 Hafod Mastering Limited and Sudeep Audio.com LLP
 
 using Avalonia;
 using Avalonia.Controls;
@@ -71,6 +71,37 @@ public class AppHostTests
             RoutedEvent = InputElement.KeyDownEvent,
             Key = Key.Space,
         });
+
+    [Fact]
+    public void The_window_carries_the_app_icon_not_the_generic_Windows_one()
+    {
+        EnsureHeadless();
+        var window = Show(new SilentToneOutput());
+
+        // Window.Icon is what Avalonia passes to SetIcon; the .csproj's ApplicationIcon only
+        // brands the file. Null here is the generic-title-bar bug the Store screenshots caught.
+        Assert.NotNull(window.Icon);
+    }
+
+    [Fact]
+    public void F1_opens_the_help_menu_on_the_window()
+    {
+        EnsureHeadless();
+        var window = Show(new SilentToneOutput());
+        var view = ViewIn(window);
+
+        Assert.NotNull(view.HelpMenu);
+        Assert.False(view.HelpMenu!.IsOpen);
+
+        window.RaiseEvent(new KeyEventArgs
+        {
+            RoutedEvent = InputElement.KeyDownEvent,
+            Key = Key.F1,
+        });
+        Dispatcher.UIThread.RunJobs();
+
+        Assert.True(view.HelpMenu.IsOpen, "F1 did not open the help menu");
+    }
 
     [Fact]
     public void Space_starts_and_stops_the_tone_one_toggle_per_press()

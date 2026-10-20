@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-// Copyright 2026 Hafod Mastering Ltd and Sudeep Audio
+// Copyright 2026 Hafod Mastering Limited and Sudeep Audio.com LLP
 
 using Avalonia;
 using Avalonia.Controls;
@@ -707,5 +707,65 @@ public class HeadlessRenderTests
         var render = Path.Combine(directory, "sa-sur-slider-focused.png");
         frame!.Save(render);
         Output.WriteLine($"RENDER={render}");
+    }
+
+    [Fact]
+    public void The_help_menu_asks_for_the_manual_licences_and_about()
+    {
+        EnsureHeadless();
+        var view = NewView(out _);
+
+        var button = view.FindControl<Button>("HelpButton");
+        Assert.NotNull(button);
+        Assert.NotNull(button!.Content);
+        Assert.Contains("Help", ToolTip.GetTip(button) as string);
+
+        var menu = view.HelpMenu;
+        Assert.NotNull(menu);
+
+        var items = menu!.Items.OfType<MenuItem>().ToList();
+        Assert.Equal(3, items.Count);
+        Assert.Equal("User Manual", items[0].Header);
+        Assert.Equal("Licences and notices", items[1].Header);
+        Assert.Equal("About SA-Sur", items[2].Header);
+
+        var raised = new List<HelpTopic>();
+        view.HelpRequested += (_, topic) => raised.Add(topic);
+        foreach (var item in items)
+        {
+            item.RaiseEvent(new Avalonia.Interactivity.RoutedEventArgs(MenuItem.ClickEvent));
+        }
+
+        Assert.Equal([HelpTopic.Manual, HelpTopic.Licences, HelpTopic.About], raised);
+    }
+
+    [Fact]
+    public void Changing_the_appearance_tells_the_window_so_it_can_restyle_the_title_bar()
+    {
+        EnsureHeadless();
+        var view = NewView(out _);
+
+        var raised = 0;
+        view.AppearanceChanged += (_, _) => raised++;
+        view.CycleAppearance();
+
+        Assert.Equal(1, raised);
+    }
+
+    [Fact]
+    public void A_settings_file_that_cannot_be_written_is_reported_rather_than_swallowed()
+    {
+        // A path whose parent is a regular file: CreateDirectory cannot succeed, so this is the
+        // read-only-%APPDATA% case without needing a read-only volume.
+        var blocker = Path.Combine(Path.GetTempPath(), $"sa-sur-blocker-{Guid.NewGuid():N}");
+        File.WriteAllText(blocker, "not a directory");
+
+        var settings = new AppSettings { FilePath = Path.Combine(blocker, "settings.json") };
+        settings.Appearance = ThemeMode.Dark;
+        settings.Save();
+
+        Assert.True(settings.LastSaveFailed);
+
+        File.Delete(blocker);
     }
 }

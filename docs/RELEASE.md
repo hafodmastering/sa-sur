@@ -18,24 +18,35 @@ depends on that membership staying paid.
 
 ## Version numbering
 
-Two numbers, two jobs.
+**One version, three channels.** The customer-facing number is the same on all
+three channels: `1.2.0`. "SA-Sur 1.2.0" means one thing on the release page, in the
+Mac App Store and in the Microsoft Store, and a different number means a different
+release rather than a different channel.
 
-`CFBundleShortVersionString` is the customer-facing line, and the two channels run
-on their own version lines because they are different artifacts on different
-clocks (see [APPSTORE.md](APPSTORE.md)). The tree carries the **direct download**
-number: `Info.plist`, and `VERSION` in `build.sh` for the zip's filename.
-`tools/store-build.sh` stamps the store's own number into the bundle it assembles
-(`STORE_VERSION`, default **1.1**), so both channels build from this one tree.
-There is no `VERSION` file; the two scripts and `Info.plist` are the whole story.
+Until 1.2.0 the direct download was 1.0, the Mac App Store 1.1 and the Microsoft
+Store 1.1.1.0. Three numbers for one code base meant every conversation needed a
+table, and a metadata-only store update looked like a new product. The channel is
+already stated by where the user got the copy.
+
+- **Minor** (`1.3.0`) for a release that changes behaviour.
+- **Patch** (`1.2.1`) for a release that changes only metadata, documentation or
+  packaging: a store listing, the manual, a rebuilt artifact.
+- **Tags** are `v1.2.0`: annotated, on the commit the artifacts were built from.
+
+Where a format forces a shape:
+
+| Surface | Form | This round |
+|---|---|---|
+| `Info.plist` `CFBundleShortVersionString` | `MAJOR.MINOR.PATCH` | `1.2.0` |
+| `SaSur.App.csproj` `<Version>` | `MAJOR.MINOR.PATCH` | `1.2.0` |
+| MSIX `Identity/@Version` | four parts, last always `0` | `1.2.0.0` |
 
 `CFBundleVersion` is a build counter no user ever reads, so it counts **rounds
-project-wide**: the same number on both channels for the round that produced
-them. This round is **build 12** - direct download **1.0**, Mac App Store **1.1**,
-Microsoft Store **1.1.1.0** (its own four-part line).
-
-The Windows build carries its own number in
-`windows/SA-Sur.App/SaSur.App.csproj`. It follows the direct-download line, not
-the store's, and releases in step with the macOS zip from the same tag.
+project-wide**: the same number on all three channels for the round that produced
+them. **This round is build 13.** `build.sh` and `tools/store-build.sh` both read
+the version out of `Info.plist`, so there is one number in the tree, not two; the
+Windows `<Version>` and `windows/packaging/store-identity.psd1` are the only other
+places to change.
 
 The manual is a resource in the bundle, so a change to `docs/MANUAL.md` is a
 release round like any other: re-render the PDF, re-sign, notarize, staple,
@@ -169,8 +180,10 @@ a replacement certificate, so a lost private key is a problem for the whole team
 
 ## Step 3 - Build and notarize, per release
 
-Bump `CFBundleShortVersionString`/`CFBundleVersion` in `Info.plist` and
-`VERSION` in `build.sh` **together** before starting.
+Bump `CFBundleShortVersionString`/`CFBundleVersion` in `Info.plist` before
+starting; `build.sh` reads both from it. The Windows `<Version>` in
+`SaSur.App.csproj`, the MSIX identity in `windows/packaging/store-identity.psd1`
+and `docs/MANUAL.md`'s "Applies to" line are the other three strings to move.
 
 ```sh
 ./verify.sh                                                    # must be all green
@@ -225,15 +238,19 @@ to step 3.
 
 ## Windows
 
-The Windows build is the same app in C# + Avalonia, carried by its own number in
-`windows/SA-Sur.App/SaSur.App.csproj`. The **direct download** is built, tested
-and published by `.github/workflows/windows.yml` (`dotnet publish`, single-file,
-win-x64). The **Microsoft Store** package is built by
-`windows/packaging/pack-msix.ps1` and carries its own version line (1.1.1.0 in
-Submission 1); the workflow does not build it. Both ship from the same tag as the
-macOS zip. The repository carries `LICENSE` and `NOTICE`, and the release notes
-carry a SHA-256; the binaries must also carry the licence and notices - see
-`THIRD-PARTY-NOTICES.md` and the packaging step below.
+The Windows build is the same app in C# + Avalonia, carrying the same version
+number as the macOS build. The **direct download** is built, tested and published
+by `.github/workflows/windows.yml` (`dotnet publish`, single-file, win-x64). The
+**Microsoft Store** package is built by `windows/packaging/pack-msix.ps1` and
+given the same number in four parts (`1.2.0.0`); the workflow does not build it.
+Both ship from the same tag as the macOS zip.
+
+**The artifacts carry the licences.** `pack-msix.ps1` stages `SA-Sur-Manual.pdf`,
+`LICENSE`, `NOTICE`, `EULA.txt`, `THIRD-PARTY-NOTICES.txt` and the Nunito `OFL.txt`
+into the package root, and fails the build if the manual is missing or older than
+`docs/MANUAL.md`. The macOS `build.sh` and `tools/store-build.sh` copy the same
+files into `Contents/Resources`, where the Help menu's *Licences* item reads them.
+A release whose binaries do not carry them is not ready.
 
 The direct download is unsigned: an unsigned `.exe` plus a published hash is the
 same trade macOS made before notarization, at £0, and a purchased certificate
@@ -241,6 +258,12 @@ would still warn until reputation accrues. The Microsoft Store build is signed b
 Microsoft after certification, so it installs without a prompt. What each
 channel's signature does and does not prove is in
 [docs/CODE-SIGNING.md](CODE-SIGNING.md).
+
+**Store screenshots are build artifacts.** `tools/windows-store-screenshots.sh`
+renders them from the same UI at the same commit, and `pack-msix.ps1` fails if the
+screenshots in `workspace/sa-sur-store-screenshots/win/` predate the commit being
+packaged. A screenshot that shows an older window is a claim about a build nobody
+can download.
 
 ## If the collaboration changes
 
