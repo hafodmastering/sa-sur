@@ -15,8 +15,8 @@ SA-Sur shows the frequency of any note in twelve-tone equal temperament and play
 | Channel | Version | State |
 |---|---|---|
 | GitHub release (direct download) | 1.2.0 | Published 20 October 2026 |
-| Mac App Store | 1.2.0 | Live; 1.1 was live from 19 October 2026 |
-| Microsoft Store | 1.2.0 | Live; 1.1 was live from 20 October 2026 |
+| Mac App Store | 1.2.0 | With App Review; 1.1 live since 19 October 2026 |
+| Microsoft Store | 1.2.0 | With certification; 1.1 live since 20 October 2026 |
 
 The source is the same in all three. The Mac App Store build is sandboxed; both store builds are licensed under the [SA-Sur End User Licence Agreement](EULA.md), which incorporates Apache-2.0 for the source. The GitHub download is Apache-2.0 alone. See [Licence and marks](#licence-and-marks).
 
@@ -36,7 +36,7 @@ The direct Windows download is **not signed**, so SmartScreen shows *"Windows pr
 
 The controls and audio behaviour are the same on both platforms, including the manual, the licences and the appearance setting. Audio goes to the default output device.
 
-**Stores.** SA-Sur **1.2.0** is on the Mac App Store and on the Microsoft Store, as separate, store-signed artifacts from the same source. See [docs/APPSTORE.md](docs/APPSTORE.md) and [docs/CODE-SIGNING.md](docs/CODE-SIGNING.md).
+**Stores.** SA-Sur **1.1** is live on the Mac App Store and on the Microsoft Store; **1.2.0** is in review and certification at the time of writing, as separate store-signed artifacts from the same source. See [docs/APPSTORE.md](docs/APPSTORE.md) and [docs/CODE-SIGNING.md](docs/CODE-SIGNING.md).
 
 ## Use
 
@@ -132,7 +132,7 @@ The names, logos and marks of Hafod Mastering and Sudeep Audio, and the **SA-Sur
 
 SA-Sur does one job in our studio. You're welcome to change it to suit yours. We don't offer support, review pull requests or collect feature requests; a tool like this is worth having because it is shaped to one studio's way of working.
 
-That is the whole reason the source is here. `src/` is about 620 lines of Swift and the frequency maths is one line of it, so make it yours. Paste the source into whichever AI assistant you already use and ask:
+That is the whole reason the source is here. `src/` is about 715 lines of Swift and the frequency maths is one line of it, so make it yours. Paste the source into whichever AI assistant you already use and ask:
 
 - *"Add a cents-deviation readout against A=440 to `src/NoteMath.swift`, and extend `tests/main.swift` to cover it."*
 - *"Rewrite `src/Views.swift` with my studio's colours, and drop the two bundled marks."*
