@@ -25,13 +25,27 @@
 #     document as one page 6,487 pt tall.
 #   - WKWebView.printOperation(with:) blocks the main thread indefinitely when
 #     run from a script, with or without a visible window (45 s watchdog).
-#   - A fresh `--headless` Chromium launch hangs on its first run, before it
-#     writes anything.
+#   - A fresh `--headless` Chromium launch hung on its first run, before it wrote
+#     anything. Retried on 20 Oct with the installed Google Chrome and
+#     --headless=new: it wrote the PDF in about four seconds. See below.
 #
-# So: open the HTML in a browser and print to PDF at A4, or drive the browser
-# already running (CDP Page.printToPDF with preferCSSPageSize), and save it to
-# docs/SA-Sur-User-Manual.pdf. This script fails if that PDF is older than the
-# markdown, which is what stops a stale manual shipping in a signed app.
+# So: print the HTML to PDF at A4 and save it to docs/SA-Sur-User-Manual.pdf.
+# This script fails if that PDF is older than the markdown, which is what stops a
+# stale manual shipping in a signed app.
+#
+# WHAT WORKS (20 Oct 2026): Chrome headless, which renders the document's own
+# @page rule and needs no window:
+#
+#   TMPD=$(mktemp -d)
+#   "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" \
+#       --headless=new --disable-gpu --no-first-run --no-default-browser-check \
+#       --user-data-dir="$TMPD" --no-pdf-header-footer \
+#       --print-to-pdf="$PWD/docs/SA-Sur-User-Manual.pdf" \
+#       "file://$PWD/build/manual/SA-Sur-Manual.html"
+#
+# It prints a few harmless CVDisplayLink/task_policy errors on macOS and still
+# writes the file. The page count is asserted by tools/CheckManual.swift: adding
+# or removing a page is a layout decision, so update that number deliberately.
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
